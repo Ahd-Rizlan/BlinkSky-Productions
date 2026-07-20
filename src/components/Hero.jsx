@@ -72,8 +72,8 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.9 }}
         >
-          <a href="#contact" className="btn-primary">
-            Get a Customised Quote
+          <a href="#quote" className="btn-primary">
+            Get Quote
           </a>
           <a href="#work" className="btn-ghost">
             View Our Work

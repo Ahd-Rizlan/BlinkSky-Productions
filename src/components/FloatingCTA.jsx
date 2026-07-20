@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CalendarCheck, FileText } from 'lucide-react'
+import { CalendarCheck, Mail } from 'lucide-react'
 import { whatsappLink } from '../data/socials'
 
 /** WhatsApp glyph — lucide has no brand icons. */
@@ -32,7 +32,7 @@ export default function FloatingCTA() {
           {past && (
             <motion.a
               key="book"
-              href="#contact"
+              href="#quote"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 12 }}
@@ -41,7 +41,7 @@ export default function FloatingCTA() {
                          text-sm font-medium text-ink-950 shadow-xl shadow-black/30 transition-all duration-300
                          hover:bg-champagne-light hover:-translate-y-0.5 cursor-pointer"
             >
-              <CalendarCheck size={17} /> Book a Shoot
+              <CalendarCheck size={17} /> Get Quote
             </motion.a>
           )}
         </AnimatePresence>
@@ -75,18 +75,18 @@ export default function FloatingCTA() {
           <WhatsAppIcon size={24} />
         </a>
         <a
-          href="#contact"
+          href="#quote"
           className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-champagne
                      text-sm font-semibold text-ink-950"
         >
-          <CalendarCheck size={17} /> Book a Shoot
+          <CalendarCheck size={17} /> Get Quote
         </a>
         <a
           href="#contact"
-          aria-label="Get a customised quote"
+          aria-label="Contact us"
           className="flex h-12 w-14 shrink-0 items-center justify-center rounded-xl border border-champagne/50 text-champagne"
         >
-          <FileText size={19} />
+          <Mail size={19} />
         </a>
       </div>
     </>

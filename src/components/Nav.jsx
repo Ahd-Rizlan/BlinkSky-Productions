@@ -43,8 +43,8 @@ export default function Nav() {
               {l.label}
             </a>
           ))}
-          <a href="#contact" className="btn-primary">
-            Book a Shoot
+          <a href="#quote" className="btn-primary">
+            Get Quote
           </a>
         </div>
 
@@ -76,11 +76,11 @@ export default function Nav() {
             </a>
           ))}
           <a
-            href="#contact"
+            href="#quote"
             onClick={() => setOpen(false)}
             className="btn-primary mt-2 w-full"
           >
-            Book a Shoot
+            Get Quote
           </a>
         </div>
       </div>

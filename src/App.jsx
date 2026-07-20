@@ -9,8 +9,16 @@ import Brands from './components/Brands'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import FloatingCTA from './components/FloatingCTA'
+import QuotePage from './components/QuotePage'
+import { useHashRoute } from './hooks/useHashRoute'
 
 export default function App() {
+  const route = useHashRoute()
+
+  // /#quote is a standalone page — no site chrome, so the wizard has the
+  // visitor's full attention.
+  if (route === 'quote') return <QuotePage />
+
   return (
     <>
       <BrandIntro />

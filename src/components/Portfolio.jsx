@@ -36,17 +36,24 @@ export default function Portfolio() {
           intro="A living portfolio across every kind of shoot. Filter by category, and tap any frame to view it full-size."
         />
 
-        {/* Filter pills */}
-        <div className="mt-10 flex flex-wrap gap-2.5">
+        {/* Filter pills — a swipeable snap row on phones so they never wrap into
+            a cramped block; normal wrapping from sm up. 44px touch targets. */}
+        <div
+          className="-mx-6 mt-10 flex snap-x gap-2.5 overflow-x-auto px-6 pb-1
+                     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+                     sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+        >
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setFilter(c.id)}
-              className={`rounded-full px-5 py-2 text-sm transition-all duration-300 ease-smooth cursor-pointer ${
-                filter === c.id
-                  ? 'bg-champagne text-ink-950 font-medium'
-                  : 'border border-ink-600 text-cloud/70 hover:border-champagne/50 hover:text-cloud'
-              }`}
+              aria-pressed={filter === c.id}
+              className={`min-h-[44px] shrink-0 snap-start rounded-full px-5 text-sm
+                          transition-all duration-300 ease-smooth cursor-pointer active:scale-95 ${
+                            filter === c.id
+                              ? 'bg-champagne text-ink-950 font-medium'
+                              : 'border border-ink-600 text-cloud/70 hover:border-champagne/50 hover:text-cloud'
+                          }`}
             >
               {c.label}
             </button>
@@ -68,7 +75,7 @@ export default function Portfolio() {
                 exit={{ opacity: 0, scale: 0.92 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => setLightboxIndex(i)}
-                className={`group relative overflow-hidden rounded-xl cursor-pointer ${
+                className={`group relative overflow-hidden rounded-xl cursor-pointer transition-transform active:scale-[0.97] ${
                   spanClasses[item.span] || ''
                 }`}
                 aria-label={`Open ${item.title}`}
@@ -79,12 +86,14 @@ export default function Portfolio() {
                   className="transition-transform duration-700 ease-smooth group-hover:scale-105"
                 />
                 <Watermark size="sm" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                  <span className="font-serif text-lg text-cloud">
+                {/* On touch there is no hover, so the title/gradient stay
+                    visible by default and only hide-until-hover from md up. */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100" />
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 transition-all duration-300 md:p-4 md:opacity-0 md:group-hover:opacity-100">
+                  <span className="font-serif text-base leading-tight text-cloud md:text-lg">
                     {item.title}
                   </span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-champagne text-ink-950">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-champagne text-ink-950">
                     <Plus size={16} />
                   </span>
                 </div>

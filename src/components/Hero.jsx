@@ -82,7 +82,7 @@ export default function Hero() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-cloud/70 underline-offset-4
+            className="inline-flex min-h-[44px] items-center gap-2 text-sm text-cloud/70 underline-offset-4
                        transition-colors hover:text-champagne hover:underline"
           >
             <Instagram size={16} /> or message us directly
@@ -93,7 +93,7 @@ export default function Hero() {
       {/* Scroll cue */}
       <a
         href="#services"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-cloud/50 hover:text-champagne transition-colors"
+        className="absolute bottom-6 left-1/2 flex h-11 w-11 -translate-x-1/2 items-center justify-center animate-bounce text-cloud/50 transition-colors hover:text-champagne"
         aria-label="Scroll to content"
       >
         <ArrowDown size={22} />

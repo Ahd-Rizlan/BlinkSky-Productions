@@ -27,26 +27,21 @@ export default function Hero() {
 
       {/* Content */}
       <div className="container-x relative flex min-h-[100svh] flex-col justify-center pt-28 pb-16">
-        {/* Brand moment — the mark leads, so visitors remember who this is. */}
-        <motion.img
-          src="/logo-landscape.png"
-          alt="BlinkSky Productions"
-          className="mb-7 h-20 w-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] sm:h-24 md:h-32"
-          width="420"
-          height="168"
-          fetchpriority="high"
-          initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ delay: 0.25, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        />
-
+        {/* Small brand mark — present, but the photograph stays the hero. */}
         <motion.div
           className="mb-6 flex items-center gap-3"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.8 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
         >
-          <span className="h-px w-10 bg-champagne" />
+          <img
+            src="/logo-portrait.png"
+            alt="BlinkSky Productions"
+            className="h-10 w-10 md:h-11 md:w-11"
+            width="44"
+            height="44"
+          />
+          <span className="h-px w-8 bg-champagne" />
           <span className="eyebrow">Photography &amp; Videography Studio</span>
         </motion.div>
 

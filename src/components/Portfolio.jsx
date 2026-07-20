@@ -141,11 +141,6 @@ export default function Portfolio() {
         {/* Hand-off to Instagram, where the full body of work lives. */}
         <Reveal delay={0.1}>
           <div className="mt-10 flex flex-col items-center gap-3 text-center">
-            {items.length > shown.length && (
-              <p className="text-sm text-cloud/50">
-                Showing {shown.length} of {items.length} frames
-              </p>
-            )}
             <a
               href={studio.instagram}
               target="_blank"

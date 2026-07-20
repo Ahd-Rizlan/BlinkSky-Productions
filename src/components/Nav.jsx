@@ -29,7 +29,7 @@ export default function Nav() {
       }`}
     >
       <nav className="container-x flex items-center justify-between">
-        <Logo />
+        <Logo size={scrolled ? 'sm' : 'md'} />
 
         <div className="hidden items-center gap-9 md:flex">
           {links.map((l) => (

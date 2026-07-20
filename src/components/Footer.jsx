@@ -23,7 +23,7 @@ export default function Footer() {
       <div className="container-x">
         <div className="flex flex-col items-start justify-between gap-10 md:flex-row md:items-center">
           <div>
-            <Logo />
+            <Logo size="lg" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-cloud/50">
               Photography &amp; videography studio. We frame the moments worth
               keeping.

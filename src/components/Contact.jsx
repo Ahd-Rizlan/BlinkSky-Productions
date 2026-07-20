@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Instagram, Facebook, Check } from 'lucide-react'
 import TikTok from './icons/TikTok'
 import Reveal from './Reveal'
 import { services } from '../data/services'
-import { studio as STUDIO } from '../data/socials'
+import { studio as STUDIO, whatsappLink } from '../data/socials'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
@@ -200,9 +200,22 @@ export default function Contact() {
                     <Check size={16} /> Opening your email…
                   </>
                 ) : (
-                  'Send Enquiry'
+                  'Get a Customised Quote'
                 )}
               </button>
+
+              <a
+                href={whatsappLink(
+                  `Hi BlinkSky! I'd like a customised quote for a ${form.service}.`,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full
+                           border border-[#25D366]/60 px-7 py-3 text-sm font-medium text-[#25D366]
+                           transition-colors duration-300 hover:bg-[#25D366] hover:text-ink-950 cursor-pointer"
+              >
+                Quote me on WhatsApp — fastest reply
+              </a>
               <p className="text-center text-xs text-cloud/40">
                 This opens your email app pre-filled. Prefer a live form? Wire it to
                 Formspree or a serverless function (see README).

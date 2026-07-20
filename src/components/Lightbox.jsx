@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import Watermark from './Watermark'
 
 export default function Lightbox({ items, index, onClose, onNav }) {
   const open = index !== null && index >= 0
@@ -68,11 +69,14 @@ export default function Lightbox({ items, index, onClose, onNav }) {
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={item.src}
-              alt={item.title || ''}
-              className="max-h-[78vh] w-auto rounded-lg object-contain"
-            />
+            <span className="relative block">
+              <img
+                src={item.src}
+                alt={item.title || ''}
+                className="max-h-[78vh] w-auto rounded-lg object-contain"
+              />
+              <Watermark size="lg" />
+            </span>
             {item.title && (
               <figcaption className="mt-4 text-center font-serif text-lg text-cloud/80">
                 {item.title}

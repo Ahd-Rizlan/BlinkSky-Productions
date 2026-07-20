@@ -1,6 +1,7 @@
 import { Instagram, ExternalLink, Play } from 'lucide-react'
 import { useInstagramFeed } from '../hooks/useInstagramFeed'
 import SectionHeading from './SectionHeading'
+import Watermark from './Watermark'
 import Reveal from './Reveal'
 import { studio } from '../data/socials'
 
@@ -69,6 +70,8 @@ export default function InstagramFeed() {
                     decoding="async"
                     className="block w-full h-auto transition-transform duration-700 ease-smooth group-hover:scale-105"
                   />
+
+                  <Watermark size="sm" />
 
                   {/* Persistent play badge for videos / reels */}
                   {isVideo && (

@@ -1,19 +1,31 @@
 // Landscape wordmark used in the header and footer.
 // Files live in /public: logo-landscape.png (wide) and logo-portrait.png (square).
-export default function Logo({ className = '' }) {
+const sizes = {
+  sm: 'h-10 md:h-11',
+  md: 'h-12 md:h-14',
+  lg: 'h-16 md:h-20',
+}
+
+export default function Logo({ className = '', size = 'md', asLink = true }) {
+  const img = (
+    <img
+      src="/logo-landscape.png"
+      alt="BlinkSky Productions"
+      className={`w-auto ${sizes[size]}`}
+      width="300"
+      height="120"
+    />
+  )
+
+  if (!asLink) return <span className={className}>{img}</span>
+
   return (
     <a
       href="#top"
-      className={`inline-flex items-center ${className}`}
+      className={`inline-flex items-center transition-opacity duration-300 hover:opacity-80 ${className}`}
       aria-label="BlinkSky Productions — home"
     >
-      <img
-        src="/logo-landscape.png"
-        alt="BlinkSky Productions"
-        className="h-9 w-auto md:h-10"
-        width="240"
-        height="96"
-      />
+      {img}
     </a>
   )
 }

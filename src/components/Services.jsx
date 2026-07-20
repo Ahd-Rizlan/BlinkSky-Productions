@@ -1,186 +1,159 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { services } from '../data/services'
 import SectionHeading from './SectionHeading'
-import Reveal from './Reveal'
 
 /**
- * Interactive services showcase.
+ * Services showcase — a bento grid where every tile IS a photograph.
  *
- * Desktop: an editorial list on the left; hovering (or keyboard-focusing) a row
- * cross-fades that service's photograph and copy into the panel on the right —
- * so the section shows the work rather than just describing it.
+ * Image-first by design: for a photo studio the work has to do the selling, so
+ * each service is a full-bleed frame with the title over it. Hovering (or
+ * keyboard-focusing) zooms the image, deepens the gradient and slides the copy
+ * and tags up. Every tile links to the contact section, so the section doubles
+ * as eight entry points into an enquiry.
  *
- * Mobile: the same list behaves as an accordion — tapping a row expands its
- * image and copy inline.
+ * Tile sizes vary to create rhythm; `grid-flow-dense` backfills any gaps so the
+ * mosaic stays solid no matter how the spans are tweaked.
  */
+const SPAN = {
+  wedding: 'lg:col-span-2 lg:row-span-2',
+  model: 'lg:row-span-2',
+  bridal: 'lg:row-span-2',
+  commercial: 'lg:col-span-2',
+  video: 'lg:col-span-2',
+  events: 'lg:col-span-2',
+}
+
 export default function Services() {
-  const [active, setActive] = useState(services[0].id)
-  const [openMobile, setOpenMobile] = useState(null)
-
-  const current = services.find((s) => s.id === active) ?? services[0]
-
   return (
     <section id="services" className="relative py-24 md:py-32">
       <div className="container-x">
         <SectionHeading
           eyebrow="What We Shoot"
           title="Every milestone deserves a frame."
-          intro="One studio, many stories. Hover a service to see the work — whatever the occasion, we bring the same cinematic craft to every frame."
+          intro="One studio, many stories. Explore the work — whatever the occasion, we bring the same cinematic craft to every frame."
+          align="center"
         />
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-          {/* ── The list ──────────────────────────────────────────────── */}
-          <Reveal>
-            <ul className="border-t border-ink-700">
-              {services.map((s, i) => {
-                const Icon = s.icon
-                const isActive = active === s.id
-                const isOpen = openMobile === s.id
+        <div
+          className="mt-14 grid auto-rows-[310px] grid-cols-1 gap-3 sm:grid-cols-2
+                     sm:auto-rows-[280px] lg:grid-cols-4 lg:auto-rows-[195px]
+                     lg:grid-flow-dense md:gap-4"
+        >
+          {services.map((s, i) => {
+            const Icon = s.icon
+            return (
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{
+                  duration: 0.6,
+                  delay: (i % 4) * 0.07,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className={SPAN[s.id] ?? ''}
+              >
+              <motion.a
+                href="#contact"
+                aria-label={`${s.title} — enquire`}
+                initial="rest"
+                animate="rest"
+                whileHover="hov"
+                whileFocus="hov"
+                className="group relative flex h-full w-full overflow-hidden rounded-2xl bg-ink-800
+                           cursor-pointer ring-1 ring-ink-700 transition-all duration-500 ease-smooth
+                           hover:ring-champagne/60 focus-visible:outline-none
+                           focus-visible:ring-2 focus-visible:ring-champagne"
+              >
+                {/* Photograph — zoom driven by Framer so it can't be lost to a
+                    CSS transform-composition quirk. */}
+                <motion.img
+                  src={s.image}
+                  alt={s.title}
+                  loading="lazy"
+                  decoding="async"
+                  variants={{ rest: { scale: 1 }, hov: { scale: 1.1 } }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
 
-                return (
-                  <li key={s.id} className="border-b border-ink-700">
-                    <button
-                      type="button"
-                      onMouseEnter={() => setActive(s.id)}
-                      onFocus={() => setActive(s.id)}
-                      onClick={() => {
-                        setActive(s.id)
-                        setOpenMobile(isOpen ? null : s.id)
-                      }}
-                      aria-expanded={isOpen}
-                      className="group flex w-full items-center gap-4 py-5 text-left transition-colors
-                                 duration-300 ease-smooth cursor-pointer focus-visible:outline-none
-                                 focus-visible:ring-2 focus-visible:ring-champagne md:py-6"
-                    >
-                      <span
-                        className={`font-sans text-xs tabular-nums transition-colors duration-300 ${
-                          isActive ? 'text-champagne' : 'text-cloud/35'
-                        }`}
-                      >
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
+                {/* Legibility wash — deepens on hover */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/45 to-ink-950/5
+                             transition-opacity duration-500 group-hover:from-ink-950
+                             group-hover:via-ink-950/65"
+                />
 
-                      <Icon
-                        size={20}
-                        strokeWidth={1.5}
-                        className={`shrink-0 transition-colors duration-300 ${
-                          isActive ? 'text-champagne' : 'text-cloud/45'
-                        }`}
-                      />
-
-                      <span
-                        className={`flex-1 font-serif text-2xl transition-all duration-300 ease-smooth
-                                    md:text-3xl lg:group-hover:translate-x-1 ${
-                                      isActive ? 'text-champagne' : 'text-cloud'
-                                    }`}
-                      >
-                        {s.title}
-                      </span>
-
-                      <ArrowUpRight
-                        size={20}
-                        className={`shrink-0 transition-all duration-300 ${
-                          isActive
-                            ? 'text-champagne opacity-100'
-                            : 'text-cloud/30 opacity-0 lg:group-hover:opacity-100'
-                        }`}
-                      />
-                    </button>
-
-                    {/* Mobile accordion body */}
-                    <div
-                      className={`overflow-hidden transition-[max-height,opacity] duration-500 ease-smooth lg:hidden ${
-                        isOpen ? 'max-h-[36rem] opacity-100' : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      <div className="pb-6">
-                        <div className="overflow-hidden rounded-xl">
-                          <img
-                            src={s.image}
-                            alt={s.title}
-                            loading="lazy"
-                            className="aspect-[4/3] w-full object-cover"
-                          />
-                        </div>
-                        <p className="mt-4 text-sm leading-relaxed text-cloud/65">
-                          {s.blurb}
-                        </p>
-                        <ul className="mt-4 flex flex-wrap gap-2">
-                          {s.tags.map((t) => (
-                            <li
-                              key={t}
-                              className="rounded-full border border-ink-600 px-3 py-1 text-xs text-cloud/55"
-                            >
-                              {t}
-                            </li>
-                          ))}
-                        </ul>
-                        <a href="#contact" className="btn-primary mt-5 w-full">
-                          Enquire about this
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </Reveal>
-
-          {/* ── The preview panel (desktop) ───────────────────────────── */}
-          <div className="hidden lg:block">
-            <div className="sticky top-28">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-ink-800">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={current.id}
-                    src={current.image}
-                    alt={current.title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    initial={{ opacity: 0, scale: 1.06 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                {/* Index + icon */}
+                <div className="absolute left-5 top-5 flex items-center gap-2.5">
+                  <span className="font-sans text-[11px] tabular-nums tracking-widest text-cloud/60">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <Icon
+                    size={17}
+                    strokeWidth={1.5}
+                    className="text-champagne transition-transform duration-500 group-hover:scale-110"
                   />
-                </AnimatePresence>
+                </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/25 to-transparent" />
+                {/* Arrow badge */}
+                <motion.span
+                  variants={{
+                    rest: { opacity: 0, y: 6, scale: 0.9 },
+                    hov: { opacity: 1, y: 0, scale: 1 },
+                  }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center
+                             rounded-full bg-champagne text-ink-950"
+                >
+                  <ArrowUpRight size={17} />
+                </motion.span>
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={current.id}
-                    className="absolute inset-x-0 bottom-0 p-7"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                {/* Title + reveal */}
+                <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                  <h3
+                    className="font-serif text-2xl leading-tight text-cloud transition-colors
+                               duration-300 group-hover:text-champagne md:text-[1.7rem]"
                   >
-                    <h3 className="font-serif text-3xl text-cloud">
-                      {current.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-cloud/75">
-                      {current.blurb}
-                    </p>
-                    <ul className="mt-4 flex flex-wrap gap-2">
-                      {current.tags.map((t) => (
-                        <li
-                          key={t}
-                          className="rounded-full border border-cloud/25 bg-ink-950/40 px-3 py-1 text-xs text-cloud/80 backdrop-blur-sm"
-                        >
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                    {s.title}
+                  </h3>
 
-              <a href="#contact" className="btn-primary mt-5 w-full">
-                Get a Customised Quote
-              </a>
-            </div>
-          </div>
+                  {/* champagne rule grows on hover */}
+                  <span className="mt-2.5 block h-px w-8 bg-champagne transition-all duration-500 ease-smooth group-hover:w-16" />
+
+                  {/* Copy is always visible on touch (no hover there); on desktop
+                      it stays tucked away until the tile is hovered/focused. */}
+                  <div
+                    className="mt-3 grid grid-rows-[1fr] opacity-100 transition-all duration-500 ease-smooth
+                               lg:mt-0 lg:grid-rows-[0fr] lg:opacity-0
+                               lg:group-hover:mt-3 lg:group-hover:grid-rows-[1fr] lg:group-hover:opacity-100
+                               lg:group-focus-visible:mt-3 lg:group-focus-visible:grid-rows-[1fr]
+                               lg:group-focus-visible:opacity-100"
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-sm leading-relaxed text-cloud/80 line-clamp-3">
+                        {s.blurb}
+                      </p>
+                      <ul className="mt-3 flex flex-wrap gap-2">
+                        {s.tags.map((t) => (
+                          <li
+                            key={t}
+                            className="rounded-full border border-cloud/25 bg-ink-950/50 px-2.5 py-1
+                                       text-[11px] text-cloud/85 backdrop-blur-sm"
+                          >
+                            {t}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </motion.a>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

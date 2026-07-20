@@ -79,8 +79,8 @@ export default function Portfolio() {
                   className="transition-transform duration-700 ease-smooth group-hover:scale-105"
                 />
                 <Watermark size="sm" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 opacity-0 transition-all duration-400 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 opacity-0 transition-all duration-300 group-hover:opacity-100">
                   <span className="font-serif text-lg text-cloud">
                     {item.title}
                   </span>

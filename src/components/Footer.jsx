@@ -30,12 +30,13 @@ export default function Footer() {
             </p>
           </div>
 
-          <nav className="flex flex-wrap gap-x-8 gap-y-3">
+          <nav className="flex flex-wrap gap-x-6">
             {nav.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm text-cloud/60 transition-colors hover:text-champagne"
+                className="inline-flex min-h-[44px] items-center text-sm text-cloud/60
+                           transition-colors hover:text-champagne active:text-champagne"
               >
                 {l.label}
               </a>

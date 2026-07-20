@@ -57,7 +57,7 @@ export default function InstagramFeed() {
                   href={post.permalink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative mb-3 block break-inside-avoid overflow-hidden rounded-lg bg-ink-800 md:mb-4"
+                  className="group relative mb-3 block break-inside-avoid overflow-hidden rounded-lg bg-ink-800 transition-transform active:scale-[0.97] md:mb-4"
                   aria-label={
                     (isVideo ? 'Play video — ' : '') +
                     (post.caption?.slice(0, 60) || 'View on Instagram')

@@ -27,6 +27,16 @@ export default function Portfolio() {
   const navLightbox = (dir) =>
     setLightboxIndex((i) => (i + dir + items.length) % items.length)
 
+  // How many frames sit in each category, so the filters advertise what's
+  // behind them instead of being unlabelled guesses.
+  const counts = useMemo(() => {
+    const c = { all: portfolio.length }
+    portfolio.forEach((p) => (c[p.category] = (c[p.category] ?? 0) + 1))
+    return c
+  }, [])
+
+  const labelFor = (id) => categories.find((c) => c.id === id)?.label ?? id
+
   return (
     <section id="work" className="relative py-24 md:py-32 bg-ink-900/40">
       <div className="container-x">
@@ -56,6 +66,13 @@ export default function Portfolio() {
                           }`}
             >
               {c.label}
+              <span
+                className={`ml-2 text-xs tabular-nums ${
+                  filter === c.id ? 'text-ink-950/55' : 'text-cloud/40'
+                }`}
+              >
+                {counts[c.id] ?? 0}
+              </span>
             </button>
           ))}
         </div>
@@ -89,6 +106,16 @@ export default function Portfolio() {
                 {/* On touch there is no hover, so the title/gradient stay
                     visible by default and only hide-until-hover from md up. */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100" />
+                {/* Category badge — always on, so every frame says what kind of
+                    shoot it is even when the filter is set to All Work. */}
+                <span
+                  className="absolute left-2.5 top-2.5 rounded-full bg-ink-950/70 px-2.5 py-1
+                             text-[10px] font-medium uppercase tracking-wider text-champagne
+                             backdrop-blur-sm md:left-3 md:top-3"
+                >
+                  {labelFor(item.category)}
+                </span>
+
                 <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 transition-all duration-300 md:p-4 md:opacity-0 md:group-hover:opacity-100">
                   <span className="font-serif text-base leading-tight text-cloud md:text-lg">
                     {item.title}
@@ -104,7 +131,7 @@ export default function Portfolio() {
       </div>
 
       <Lightbox
-        items={items}
+        items={items.map((i) => ({ ...i, categoryLabel: labelFor(i.category) }))}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNav={navLightbox}

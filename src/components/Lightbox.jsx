@@ -102,9 +102,18 @@ export default function Lightbox({ items, index, onClose, onNav }) {
               />
               <Watermark size="lg" />
             </span>
-            {item.title && (
-              <figcaption className="mt-4 text-center font-serif text-lg text-cloud/80">
-                {item.title}
+            {(item.title || item.categoryLabel) && (
+              <figcaption className="mt-4 text-center">
+                {item.categoryLabel && (
+                  <span className="block text-[11px] uppercase tracking-widest2 text-champagne">
+                    {item.categoryLabel}
+                  </span>
+                )}
+                {item.title && (
+                  <span className="mt-1 block font-serif text-lg text-cloud/85">
+                    {item.title}
+                  </span>
+                )}
               </figcaption>
             )}
             <p className="mt-1 text-center text-xs text-cloud/35 sm:hidden">

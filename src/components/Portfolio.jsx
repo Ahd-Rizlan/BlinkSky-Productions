@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus } from 'lucide-react'
+import { Plus, Instagram } from 'lucide-react'
 import { portfolio, categories } from '../data/portfolio'
+import { studio } from '../data/socials'
+import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
 import SmartImage from './SmartImage'
 import Watermark from './Watermark'
@@ -11,6 +13,9 @@ const spanClasses = {
   tall: 'row-span-2',
   wide: 'sm:col-span-2',
 }
+
+/** Frames shown per view before we hand people off to Instagram. */
+const MAX_SHOWN = 10
 
 export default function Portfolio() {
   const [filter, setFilter] = useState('all')
@@ -24,8 +29,12 @@ export default function Portfolio() {
     [filter],
   )
 
+  // The gallery is a teaser, not an archive — cap it and send people to
+  // Instagram for the full body of work.
+  const shown = useMemo(() => items.slice(0, MAX_SHOWN), [items])
+
   const navLightbox = (dir) =>
-    setLightboxIndex((i) => (i + dir + items.length) % items.length)
+    setLightboxIndex((i) => (i + dir + shown.length) % shown.length)
 
   // How many frames sit in each category, so the filters advertise what's
   // behind them instead of being unlabelled guesses.
@@ -83,7 +92,7 @@ export default function Portfolio() {
           className="mt-10 grid auto-rows-[220px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4"
         >
           <AnimatePresence mode="popLayout">
-            {items.map((item, i) => (
+            {shown.map((item, i) => (
               <motion.button
                 layout
                 key={item.id}
@@ -128,10 +137,29 @@ export default function Portfolio() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Hand-off to Instagram, where the full body of work lives. */}
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex flex-col items-center gap-3 text-center">
+            {items.length > shown.length && (
+              <p className="text-sm text-cloud/50">
+                Showing {shown.length} of {items.length} frames
+              </p>
+            )}
+            <a
+              href={studio.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost"
+            >
+              <Instagram size={16} /> See more of our work on Instagram
+            </a>
+          </div>
+        </Reveal>
       </div>
 
       <Lightbox
-        items={items.map((i) => ({ ...i, categoryLabel: labelFor(i.category) }))}
+        items={shown.map((i) => ({ ...i, categoryLabel: labelFor(i.category) }))}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNav={navLightbox}

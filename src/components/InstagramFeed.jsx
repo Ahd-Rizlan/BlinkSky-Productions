@@ -169,11 +169,6 @@ export default function InstagramFeed() {
         {/* Hand-off to Instagram, where the rest of the feed lives. */}
         <Reveal delay={0.1}>
           <div className="mt-10 flex flex-col items-center gap-3 text-center">
-            {filtered.length > shown.length && (
-              <p className="text-sm text-cloud/50">
-                Showing {shown.length} of {filtered.length} posts
-              </p>
-            )}
             <a
               href={IG_URL}
               target="_blank"

@@ -88,6 +88,38 @@ The Instagram section shows sample tiles until you connect the API. Two ways:
 > A `VITE_` token is visible in the browser bundle. That's acceptable for a
 > read-only display token, but Option B is safer for production.
 
+### How Instagram posts get sorted into categories
+
+**The Instagram API returns no category.** A post comes back with only an id,
+caption, media type, media/thumbnail URL, permalink and timestamp — there is no
+"this is a wedding" field, and Instagram exposes no albums or collections
+through the API.
+
+So the site reads **your caption**. Rules live in
+`src/data/instagramCategories.js` and match hashtags *or* plain words
+(case-insensitive — `#wedding` and `wedding` both count):
+
+| Category | Matches captions containing |
+|---|---|
+| Bridal | bridal, bride, gettingready, bridalportrait |
+| Wedding | wedding, nikah, homecoming, engagement, vows |
+| Model | model, portfolio, editorial, fashion, portrait |
+| Commercial | commercial, brand, product, campaign, corporate |
+| Birthday | birthday, bday, cakesmash, party |
+| Coming of Age | puberty, comingofage, samayasadangu, ceremony |
+| Film | reel, film, cinematic, video, teaser, highlight |
+
+Order matters — first match wins, and **bridal is checked before wedding** so
+bridal posts aren't swallowed by the word "wedding".
+
+**In practice:** categorisation is only as good as your captions. Post a bridal
+shoot with `#bridal` and it files itself. Anything matching nothing falls back
+to **"More Work"** (an uncaptioned video falls back to **Film**). Add or edit
+keywords in that file at any time — no other code changes needed.
+
+> Not retroactive: older posts with unhelpful captions will sit in "More Work"
+> until those captions are edited on Instagram.
+
 ### Option B — serverless proxy (recommended for production)
 
 Keeps the token server-side. A ready-made handler is included at

@@ -9,6 +9,9 @@ import { studio } from '../data/socials'
 const IG_HANDLE = studio.instagramHandle
 const IG_URL = studio.instagram
 
+/** Posts shown per view before we hand people off to Instagram. */
+const MAX_SHOWN = 10
+
 export default function InstagramFeed() {
   const { posts, status } = useInstagramFeed()
   const [filter, setFilter] = useState('all')
@@ -23,10 +26,13 @@ export default function InstagramFeed() {
     return [...map].map(([id, label]) => ({ id, label }))
   }, [posts])
 
-  const shown = useMemo(
+  const filtered = useMemo(
     () => (filter === 'all' ? posts : posts.filter((p) => p.category === filter)),
     [posts, filter],
   )
+
+  // A taste of the feed, not the whole feed — Instagram is the archive.
+  const shown = useMemo(() => filtered.slice(0, MAX_SHOWN), [filtered])
 
   return (
     <section id="instagram" className="relative py-24 md:py-32">
@@ -159,6 +165,25 @@ export default function InstagramFeed() {
             },
           )}
         </div>
+
+        {/* Hand-off to Instagram, where the rest of the feed lives. */}
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex flex-col items-center gap-3 text-center">
+            {filtered.length > shown.length && (
+              <p className="text-sm text-cloud/50">
+                Showing {shown.length} of {filtered.length} posts
+              </p>
+            )}
+            <a
+              href={IG_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+            >
+              <Instagram size={16} /> See more on Instagram
+            </a>
+          </div>
+        </Reveal>
 
         {status === 'fallback' && (
           <p className="mt-6 flex items-center gap-2 text-xs text-cloud/40">

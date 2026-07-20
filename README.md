@@ -1,0 +1,140 @@
+# BlinkSky Productions — Studio Portfolio
+
+A cinematic, dark-mode portfolio site for a photography & videography studio.
+Built with **Vite + React**, **Tailwind CSS**, and **Framer Motion**.
+
+Sections: Hero → Services → Portfolio (filterable + lightbox) → Instagram feed
+→ About → Contact → Footer.
+
+---
+
+## Quick start
+
+```bash
+cd BlinkSky-Productions
+npm install
+npm run dev
+```
+
+Open the URL Vite prints (usually http://localhost:5173).
+Build for production with `npm run build`; preview it with `npm run preview`.
+
+The site works immediately with tasteful **sample images**. Everything below is
+about swapping in the real content.
+
+---
+
+## 1. Your logo
+
+The header/footer currently use a text wordmark (`src/components/Logo.jsx`).
+To use the real logo:
+
+1. Drop the file in `public/` (e.g. `public/logo.svg` or `logo.png`).
+2. In `src/components/Logo.jsx`, replace the `<span>`/`<svg>` block with:
+   ```jsx
+   <img src="/logo.svg" alt="BlinkSky Productions" className="h-9" />
+   ```
+
+> Note: the logo image originally attached came through blank, so this wordmark
+> is a stand-in until the real file is added.
+
+## 2. Your photos
+
+Portfolio images live in `src/data/portfolio.js`. Each entry has a `src`.
+
+- **Easiest:** drop your images into `public/gallery/` and point `src` at
+  `/gallery/your-file.jpg`.
+- `span: 'tall'` makes a tile twice as tall; `span: 'wide'` makes it span two
+  columns. Leave it off for a normal square. Mix them for a magazine feel.
+- Update the `categories` list at the top of the same file to match your work.
+
+Service names, blurbs and icons live in `src/data/services.js`.
+Contact details and all social links (email, phone, Instagram, Facebook,
+TikTok) live in **one file** — `src/data/socials.js`. Edit there and the nav,
+Instagram section, contact list and footer all update.
+
+### Brand / "trusted by" logos (auto-updating)
+
+The **Brands We've Worked With** wall reads every image in
+`src/assets/brands/`. **To add a new client logo, just drop the file in that
+folder** — it appears automatically, no code changes. The brand name is taken
+from the filename (`DERMA DREAM.png` → "Derma Dream"). Each tile detects whether
+its logo is light or dark and picks a dark or light background so white logos
+never disappear. Transparent PNGs look best.
+
+---
+
+## 3. Instagram Graph API (live feed)
+
+The Instagram section shows sample tiles until you connect the API. Two ways:
+
+### Option A — direct (quickest, token ships to browser)
+
+1. **Convert the account** to a *Business* or *Creator* account and link it to a
+   Facebook Page (Instagram app → Settings → Account type).
+2. Go to [developers.facebook.com](https://developers.facebook.com/) → **My Apps**
+   → **Create App** → type *Business*.
+3. Add the **Instagram Graph API** product.
+4. Use the **Graph API Explorer** (or the Instagram Basic Display / Graph flow)
+   to generate a **long-lived access token** and find your **Instagram user id**.
+   - Long-lived tokens last ~60 days and can be refreshed.
+5. Create a `.env` file in the project root (copy `.env.example`):
+   ```
+   VITE_IG_ACCESS_TOKEN=your_long_lived_token
+   VITE_IG_USER_ID=1784xxxxxxxxxxxxx
+   ```
+6. Restart `npm run dev`. Your latest posts now render live.
+
+> A `VITE_` token is visible in the browser bundle. That's acceptable for a
+> read-only display token, but Option B is safer for production.
+
+### Option B — serverless proxy (recommended for production)
+
+Keeps the token server-side. A ready-made handler is included at
+`api/instagram.js` (works on Vercel / Netlify Functions).
+
+1. Deploy the project to Vercel (or Netlify).
+2. In the host dashboard, set **server** env vars (no `VITE_` prefix):
+   ```
+   IG_ACCESS_TOKEN=your_long_lived_token
+   IG_USER_ID=1784xxxxxxxxxxxxx
+   ```
+3. In `.env`, set only:
+   ```
+   VITE_IG_PROXY_URL=/api/instagram
+   ```
+4. The frontend now calls your proxy; the token never reaches the browser, and
+   responses are edge-cached for 10 minutes.
+
+**Token refresh:** long-lived tokens expire (~60 days). For a set-and-forget
+setup, add a scheduled job that calls the Graph API refresh endpoint, or use a
+managed embed service (Behold.so, EmbedSocial) if you'd rather not maintain it.
+
+---
+
+## 4. Make the contact form send for real (optional)
+
+The form currently opens the visitor's email app pre-filled (no backend needed).
+To capture submissions instead, point it at a service like
+[Formspree](https://formspree.io/) or a serverless function — replace the
+`mailto:` logic in `handleSubmit` inside `src/components/Contact.jsx`.
+
+---
+
+## Tech notes
+
+- **Accessibility:** semantic landmarks, keyboard-navigable lightbox (Esc / ← →),
+  visible focus rings, alt text, and `prefers-reduced-motion` handling.
+- **Performance:** images lazy-load with a shimmer skeleton; the hero image is
+  prioritized. Swap in WebP/AVIF versions of your photos for best results.
+- **Responsive:** tested layouts at 375 / 768 / 1024 / 1440 px.
+
+## Project structure
+
+```
+src/
+  components/   UI sections (Hero, Services, Portfolio, InstagramFeed, …)
+  data/         services.js, portfolio.js  ← edit your content here
+  hooks/        useInstagramFeed.js, useReveal.js
+api/            instagram.js  ← optional serverless proxy
+```

@@ -47,12 +47,28 @@ export default function Nav() {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-smooth ${
-          scrolled && !open
-            ? 'bg-ink-950/80 backdrop-blur-md border-b border-ink-700/60 py-3'
-            : 'bg-transparent py-4 md:py-5'
+          scrolled && !open ? 'py-3' : 'py-4 md:py-5'
         }`}
         style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}
       >
+        {/* The blurred bar lives on its own layer so its soft lower edge can be
+            masked without fading the logo and menu button with it. A hard
+            border-b here would read as a crisp grey seam over the dark hero —
+            this fades out instead, so there's no line in either state. */}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 -z-10 backdrop-blur-md
+                      transition-opacity duration-500 ease-smooth ${
+                        scrolled && !open
+                          ? 'bg-ink-950/85 opacity-100'
+                          : 'bg-transparent opacity-0'
+                      }`}
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to bottom, #000 55%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, #000 55%, transparent 100%)',
+          }}
+        />
         <nav className="container-x flex items-center justify-between">
           <Logo size={scrolled ? 'sm' : 'md'} />
 

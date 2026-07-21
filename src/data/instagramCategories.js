@@ -56,12 +56,30 @@ export const categoryRules = [
 export const fallback = { id: 'other', label: 'More Work' }
 
 /**
- * Work out a category from a caption.
- * Returns { id, label } — never null, so the UI always has something to show.
+ * FEATURE FLAG.
+ *
+ * false (current): sort posts only by media type — Reels vs Posts. Use this
+ *   until captions carry hashtags, since there's nothing else to sort on.
+ * true (future): once posts are captioned with tags like #wedding / #bridal,
+ *   flip this to sort into the shoot-type categories defined in categoryRules
+ *   above. Nothing else needs changing.
+ */
+export const USE_CAPTION_CATEGORIES = false
+
+/**
+ * Work out a category. Returns { id, label } — never null, so the UI always
+ * has something to show.
  */
 export function categorise(caption = '', mediaType = '') {
-  const text = (caption || '').toLowerCase()
+  // Simple mode: just Reels vs Posts, by media type.
+  if (!USE_CAPTION_CATEGORIES) {
+    return mediaType === 'VIDEO'
+      ? { id: 'reel', label: 'Reels' }
+      : { id: 'post', label: 'Posts' }
+  }
 
+  // Caption mode (for when hashtags are in use).
+  const text = (caption || '').toLowerCase()
   for (const rule of categoryRules) {
     const hit = rule.keywords.some((k) => {
       // Match '#keyword' or the bare word on a word boundary.
@@ -70,9 +88,6 @@ export function categorise(caption = '', mediaType = '') {
     })
     if (hit) return { id: rule.id, label: rule.label }
   }
-
-  // No caption match — a video at least tells us it's film work.
   if (mediaType === 'VIDEO') return { id: 'video', label: 'Film' }
-
   return fallback
 }

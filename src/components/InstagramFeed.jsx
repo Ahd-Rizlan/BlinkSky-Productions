@@ -63,7 +63,7 @@ export default function InstagramFeed() {
                        [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
                        sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
           >
-            {[{ id: 'all', label: 'All Posts' }, ...present].map((c) => {
+            {[{ id: 'all', label: 'All' }, ...present].map((c) => {
               const count =
                 c.id === 'all'
                   ? posts.length

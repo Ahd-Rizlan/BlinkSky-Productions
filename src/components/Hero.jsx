@@ -27,20 +27,12 @@ export default function Hero() {
 
       {/* Content */}
       <div className="container-x relative flex min-h-[100svh] flex-col justify-center pt-28 pb-16">
-        {/* Small brand mark — present, but the photograph stays the hero. */}
         <motion.div
           className="mb-6 flex items-center gap-3"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          <img
-            src="/logo-portrait.png"
-            alt="BlinkSky Productions"
-            className="h-10 w-10 md:h-11 md:w-11"
-            width="44"
-            height="44"
-          />
           <span className="h-px w-8 bg-champagne" />
           <span className="eyebrow">Photography &amp; Videography Studio</span>
         </motion.div>
@@ -82,7 +74,7 @@ export default function Hero() {
             href={whatsappLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-cloud/70 underline-offset-4
+            className="inline-flex min-h-[44px] items-center gap-2 text-sm text-cloud/70 underline-offset-4
                        transition-colors hover:text-champagne hover:underline"
           >
             <Instagram size={16} /> or message us directly
@@ -93,7 +85,7 @@ export default function Hero() {
       {/* Scroll cue */}
       <a
         href="#services"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-cloud/50 hover:text-champagne transition-colors"
+        className="absolute bottom-6 left-1/2 flex h-11 w-11 -translate-x-1/2 items-center justify-center animate-bounce text-cloud/50 transition-colors hover:text-champagne"
         aria-label="Scroll to content"
       >
         <ArrowDown size={22} />

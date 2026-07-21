@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { categorise } from '../data/instagramCategories'
 
 /**
  * useInstagramFeed — fetches recent media from the Instagram Graph API.
@@ -45,8 +46,35 @@ const FALLBACK = [
   media_type: 'IMAGE',
   media_url: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=80`,
   permalink: 'https://instagram.com/',
-  caption: 'BlinkSky Productions',
+  // Sample captions carry hashtags so the category filter is demonstrable
+  // before the real API is connected.
+  caption: [
+    'Wedding day #wedding',
+    'Studio session #model',
+    'Getting ready #bridal',
+    'The vows #wedding',
+    'Street portrait #model',
+    'Brand campaign #commercial',
+    'Engagement evening #wedding',
+    'Veil and light #bridal',
+    'Fashion movement #model',
+    'The send off #film #cinematic',
+    'Golden hour party #birthday',
+    'Ceremony #comingofage',
+  ][i],
 }))
+
+/**
+ * Instagram returns no category field, so we derive one from each caption
+ * (see src/data/instagramCategories.js). Every post gets `category` and
+ * `categoryLabel` attached here, once, so the UI can just filter on it.
+ */
+function withCategories(list) {
+  return list.map((p) => {
+    const c = categorise(p.caption, p.media_type)
+    return { ...p, category: c.id, categoryLabel: c.label }
+  })
+}
 
 export function useInstagramFeed() {
   const [posts, setPosts] = useState([])
@@ -68,7 +96,7 @@ export function useInstagramFeed() {
           : null
 
       if (!url) {
-        setPosts(FALLBACK)
+        setPosts(withCategories(FALLBACK))
         setStatus('fallback')
         return
       }
@@ -81,12 +109,12 @@ export function useInstagramFeed() {
           (m) => m.media_type !== 'VIDEO' || m.thumbnail_url,
         )
         if (!data.length) throw new Error('no media')
-        setPosts(data)
+        setPosts(withCategories(data))
         setStatus('ready')
       } catch (err) {
         if (err.name === 'AbortError') return
         console.warn('[Instagram] falling back to placeholders:', err.message)
-        setPosts(FALLBACK)
+        setPosts(withCategories(FALLBACK))
         setStatus('fallback')
       }
     }

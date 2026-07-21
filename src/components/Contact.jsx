@@ -49,74 +49,66 @@ export default function Contact() {
             </p>
           </Reveal>
 
+          {/* Icon-only contact row. The labels live in aria-label/title so the
+              destination is still announced to screen readers and shown on
+              hover — the icons alone carry the visual weight. */}
           <Reveal delay={0.1}>
-            <ul className="mt-10 space-y-5">
+            <ul className="mt-10 flex flex-wrap gap-3">
+              {[
+                {
+                  icon: Mail,
+                  href: `mailto:${STUDIO.email}`,
+                  label: STUDIO.email,
+                },
+                {
+                  icon: Phone,
+                  href: `tel:${STUDIO.phone.replace(/\s/g, '')}`,
+                  label: STUDIO.phone,
+                },
+                {
+                  icon: Instagram,
+                  href: STUDIO.instagram,
+                  label: `@${STUDIO.instagramHandle} on Instagram`,
+                  external: true,
+                },
+                {
+                  icon: Facebook,
+                  href: STUDIO.facebook,
+                  label: 'BlinkSky Productions on Facebook',
+                  external: true,
+                },
+                {
+                  icon: TikTok,
+                  href: STUDIO.tiktok,
+                  label: '@blinkskyproduction on TikTok',
+                  external: true,
+                },
+              ].map(({ icon: Icon, href, label, external }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    title={label}
+                    aria-label={label}
+                    {...(external
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                    className="flex h-12 w-12 items-center justify-center rounded-full border
+                               border-ink-600 text-cloud/75 transition-all duration-300 ease-smooth
+                               hover:border-champagne hover:text-champagne active:scale-90"
+                  >
+                    <Icon size={19} />
+                  </a>
+                </li>
+              ))}
               <li>
-                <a
-                  href={`mailto:${STUDIO.email}`}
-                  className="group flex items-center gap-4 text-cloud/80 hover:text-champagne transition-colors"
+                <span
+                  title={STUDIO.location}
+                  aria-label={STUDIO.location}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border
+                             border-ink-600 text-cloud/60"
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 group-hover:border-champagne">
-                    <Mail size={18} />
-                  </span>
-                  {STUDIO.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`tel:${STUDIO.phone.replace(/\s/g, '')}`}
-                  className="group flex items-center gap-4 text-cloud/80 hover:text-champagne transition-colors"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 group-hover:border-champagne">
-                    <Phone size={18} />
-                  </span>
-                  {STUDIO.phone}
-                </a>
-              </li>
-              <li className="flex items-center gap-4 text-cloud/80">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600">
-                  <MapPin size={18} />
+                  <MapPin size={19} />
                 </span>
-                {STUDIO.location}
-              </li>
-              <li>
-                <a
-                  href={STUDIO.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 text-cloud/80 hover:text-champagne transition-colors"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 group-hover:border-champagne">
-                    <Instagram size={18} />
-                  </span>
-                  @{STUDIO.instagramHandle}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={STUDIO.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 text-cloud/80 hover:text-champagne transition-colors"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 group-hover:border-champagne">
-                    <Facebook size={18} />
-                  </span>
-                  BlinkSky Productions
-                </a>
-              </li>
-              <li>
-                <a
-                  href={STUDIO.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 text-cloud/80 hover:text-champagne transition-colors"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 group-hover:border-champagne">
-                    <TikTok size={18} />
-                  </span>
-                  @blinkskyproduction
-                </a>
               </li>
             </ul>
           </Reveal>

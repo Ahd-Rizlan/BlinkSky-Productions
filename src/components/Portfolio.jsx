@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus } from 'lucide-react'
+import { Plus, Instagram } from 'lucide-react'
 import { portfolio, categories } from '../data/portfolio'
+import { studio } from '../data/socials'
+import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
 import SmartImage from './SmartImage'
 import Watermark from './Watermark'
@@ -11,6 +13,9 @@ const spanClasses = {
   tall: 'row-span-2',
   wide: 'sm:col-span-2',
 }
+
+/** Frames shown per view before we hand people off to Instagram. */
+const MAX_SHOWN = 10
 
 export default function Portfolio() {
   const [filter, setFilter] = useState('all')
@@ -24,8 +29,22 @@ export default function Portfolio() {
     [filter],
   )
 
+  // The gallery is a teaser, not an archive — cap it and send people to
+  // Instagram for the full body of work.
+  const shown = useMemo(() => items.slice(0, MAX_SHOWN), [items])
+
   const navLightbox = (dir) =>
-    setLightboxIndex((i) => (i + dir + items.length) % items.length)
+    setLightboxIndex((i) => (i + dir + shown.length) % shown.length)
+
+  // How many frames sit in each category, so the filters advertise what's
+  // behind them instead of being unlabelled guesses.
+  const counts = useMemo(() => {
+    const c = { all: portfolio.length }
+    portfolio.forEach((p) => (c[p.category] = (c[p.category] ?? 0) + 1))
+    return c
+  }, [])
+
+  const labelFor = (id) => categories.find((c) => c.id === id)?.label ?? id
 
   return (
     <section id="work" className="relative py-24 md:py-32 bg-ink-900/40">
@@ -36,19 +55,33 @@ export default function Portfolio() {
           intro="A living portfolio across every kind of shoot. Filter by category, and tap any frame to view it full-size."
         />
 
-        {/* Filter pills */}
-        <div className="mt-10 flex flex-wrap gap-2.5">
+        {/* Filter pills — a swipeable snap row on phones so they never wrap into
+            a cramped block; normal wrapping from sm up. 44px touch targets. */}
+        <div
+          className="-mx-6 mt-10 flex snap-x gap-2.5 overflow-x-auto px-6 pb-1
+                     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+                     sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+        >
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setFilter(c.id)}
-              className={`rounded-full px-5 py-2 text-sm transition-all duration-300 ease-smooth cursor-pointer ${
-                filter === c.id
-                  ? 'bg-champagne text-ink-950 font-medium'
-                  : 'border border-ink-600 text-cloud/70 hover:border-champagne/50 hover:text-cloud'
-              }`}
+              aria-pressed={filter === c.id}
+              className={`min-h-[44px] shrink-0 snap-start rounded-full px-5 text-sm
+                          transition-all duration-300 ease-smooth cursor-pointer active:scale-95 ${
+                            filter === c.id
+                              ? 'bg-champagne text-ink-950 font-medium'
+                              : 'border border-ink-600 text-cloud/70 hover:border-champagne/50 hover:text-cloud'
+                          }`}
             >
               {c.label}
+              <span
+                className={`ml-2 text-xs tabular-nums ${
+                  filter === c.id ? 'text-ink-950/55' : 'text-cloud/40'
+                }`}
+              >
+                {counts[c.id] ?? 0}
+              </span>
             </button>
           ))}
         </div>
@@ -59,7 +92,7 @@ export default function Portfolio() {
           className="mt-10 grid auto-rows-[220px] grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4"
         >
           <AnimatePresence mode="popLayout">
-            {items.map((item, i) => (
+            {shown.map((item, i) => (
               <motion.button
                 layout
                 key={item.id}
@@ -68,7 +101,7 @@ export default function Portfolio() {
                 exit={{ opacity: 0, scale: 0.92 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => setLightboxIndex(i)}
-                className={`group relative overflow-hidden rounded-xl cursor-pointer ${
+                className={`group relative overflow-hidden rounded-xl cursor-pointer transition-transform active:scale-[0.97] ${
                   spanClasses[item.span] || ''
                 }`}
                 aria-label={`Open ${item.title}`}
@@ -79,12 +112,24 @@ export default function Portfolio() {
                   className="transition-transform duration-700 ease-smooth group-hover:scale-105"
                 />
                 <Watermark size="sm" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                  <span className="font-serif text-lg text-cloud">
+                {/* On touch there is no hover, so the title/gradient stay
+                    visible by default and only hide-until-hover from md up. */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100" />
+                {/* Category badge — always on, so every frame says what kind of
+                    shoot it is even when the filter is set to All Work. */}
+                <span
+                  className="absolute left-2.5 top-2.5 rounded-full bg-ink-950/70 px-2.5 py-1
+                             text-[10px] font-medium uppercase tracking-wider text-champagne
+                             backdrop-blur-sm md:left-3 md:top-3"
+                >
+                  {labelFor(item.category)}
+                </span>
+
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 transition-all duration-300 md:p-4 md:opacity-0 md:group-hover:opacity-100">
+                  <span className="font-serif text-base leading-tight text-cloud md:text-lg">
                     {item.title}
                   </span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-champagne text-ink-950">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-champagne text-ink-950">
                     <Plus size={16} />
                   </span>
                 </div>
@@ -92,10 +137,24 @@ export default function Portfolio() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Hand-off to Instagram, where the full body of work lives. */}
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex flex-col items-center gap-3 text-center">
+            <a
+              href={studio.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost"
+            >
+              <Instagram size={16} /> See more of our work on Instagram
+            </a>
+          </div>
+        </Reveal>
       </div>
 
       <Lightbox
-        items={items}
+        items={shown.map((i) => ({ ...i, categoryLabel: labelFor(i.category) }))}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNav={navLightbox}

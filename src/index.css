@@ -10,6 +10,17 @@
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Removes the ~300ms tap delay; stops iOS inflating text on rotate. */
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* No grey flash box when tapping on mobile — we supply our own press
+     feedback through active: states instead. */
+  a,
+  button,
+  [role='button'] {
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -52,19 +63,21 @@
     @apply text-champagne text-xs md:text-sm font-medium uppercase tracking-widest2;
   }
 
+  /* min-h-[44px] keeps every primary action at the accessible touch size. */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-champagne px-7 py-3
-           text-sm font-medium text-ink-950 transition-all duration-300 ease-smooth
-           hover:bg-champagne-light hover:-translate-y-0.5 focus-visible:outline-none
-           focus-visible:ring-2 focus-visible:ring-champagne focus-visible:ring-offset-2
-           focus-visible:ring-offset-ink-950 cursor-pointer;
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-champagne
+           px-7 py-3 text-sm font-medium text-ink-950 transition-all duration-300 ease-smooth
+           hover:bg-champagne-light hover:-translate-y-0.5 active:scale-95
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne
+           focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 cursor-pointer;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink-600
-           px-7 py-3 text-sm font-medium text-cloud transition-all duration-300 ease-smooth
-           hover:border-champagne hover:text-champagne focus-visible:outline-none
-           focus-visible:ring-2 focus-visible:ring-champagne cursor-pointer;
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full border
+           border-ink-600 px-7 py-3 text-sm font-medium text-cloud transition-all duration-300
+           ease-smooth hover:border-champagne hover:text-champagne active:scale-95
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne
+           cursor-pointer;
   }
 
   /* Infinite logo carousel */

@@ -1,12 +1,22 @@
 import { useEffect, useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Menu, X, Instagram, Facebook, ArrowUpRight } from 'lucide-react'
 import Logo from './Logo'
+import TikTok from './icons/TikTok'
+import { studio } from '../data/socials'
 
 const links = [
   { href: '#services', label: 'Services' },
   { href: '#work', label: 'Work' },
   { href: '#instagram', label: 'Instagram' },
   { href: '#about', label: 'About' },
+  { href: '#contact', label: 'Contact' },
+]
+
+const socials = [
+  { icon: Instagram, href: studio.instagram, label: 'Instagram' },
+  { icon: Facebook, href: studio.facebook, label: 'Facebook' },
+  { icon: TikTok, href: studio.tiktok, label: 'TikTok' },
 ]
 
 export default function Nav() {
@@ -20,70 +30,159 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Lock the page behind the full-screen menu, and let Esc close it.
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-smooth ${
-        scrolled
-          ? 'bg-ink-950/80 backdrop-blur-md border-b border-ink-700/60 py-3'
-          : 'bg-transparent py-5'
-      }`}
-    >
-      <nav className="container-x flex items-center justify-between">
-        <Logo size={scrolled ? 'sm' : 'md'} />
-
-        <div className="hidden items-center gap-9 md:flex">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="relative text-sm text-cloud/80 transition-colors duration-300 hover:text-cloud
-                         after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-champagne
-                         after:transition-all after:duration-300 hover:after:w-full"
-            >
-              {l.label}
-            </a>
-          ))}
-          <a href="#quote" className="btn-primary">
-            Get Quote
-          </a>
-        </div>
-
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 text-cloud md:hidden cursor-pointer"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </nav>
-
-      {/* Mobile drawer */}
-      <div
-        className={`md:hidden overflow-hidden transition-[max-height] duration-500 ease-smooth ${
-          open ? 'max-h-96' : 'max-h-0'
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-smooth ${
+          scrolled && !open ? 'py-3' : 'py-4 md:py-5'
         }`}
+        style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}
       >
-        <div className="container-x flex flex-col gap-1 pt-4 pb-2">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-3 text-cloud/85 transition-colors hover:bg-ink-800 hover:text-cloud"
-            >
-              {l.label}
+        {/* The blurred bar lives on its own layer so its soft lower edge can be
+            masked without fading the logo and menu button with it. A hard
+            border-b here would read as a crisp grey seam over the dark hero —
+            this fades out instead, so there's no line in either state. */}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 -z-10 backdrop-blur-md
+                      transition-opacity duration-500 ease-smooth ${
+                        scrolled && !open
+                          ? 'bg-ink-950/85 opacity-100'
+                          : 'bg-transparent opacity-0'
+                      }`}
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to bottom, #000 55%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, #000 55%, transparent 100%)',
+          }}
+        />
+        <nav className="container-x flex items-center justify-between">
+          <Logo size={scrolled ? 'sm' : 'md'} />
+
+          <div className="hidden items-center gap-9 md:flex">
+            {links.slice(0, 4).map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="relative text-sm text-cloud/80 transition-colors duration-300 hover:text-cloud
+                           after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-champagne
+                           after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {l.label}
+              </a>
+            ))}
+            <a href="#quote" className="btn-primary">
+              Get Quote
             </a>
-          ))}
-          <a
-            href="#quote"
-            onClick={() => setOpen(false)}
-            className="btn-primary mt-2 w-full"
+          </div>
+
+          {/* 48px touch target */}
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="relative z-[70] flex h-12 w-12 items-center justify-center rounded-full
+                       border border-ink-600 bg-ink-950/60 text-cloud backdrop-blur-sm
+                       transition-transform duration-200 active:scale-90 md:hidden cursor-pointer"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
           >
-            Get Quote
-          </a>
-        </div>
-      </div>
-    </header>
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </nav>
+      </header>
+
+      {/* ── Full-screen mobile menu ─────────────────────────────────────── */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-[60] flex flex-col bg-ink-950 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <nav
+              className="flex flex-1 flex-col justify-center px-7"
+              style={{ paddingTop: 'env(safe-area-inset-top)' }}
+            >
+              {links.map((l, i) => (
+                <motion.a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.08 + i * 0.06,
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="group flex items-center justify-between border-b border-ink-800 py-5
+                             transition-colors active:text-champagne"
+                >
+                  <span className="font-serif text-4xl leading-none text-cloud">
+                    {l.label}
+                  </span>
+                  <ArrowUpRight size={22} className="text-champagne/70" />
+                </motion.a>
+              ))}
+
+              <motion.a
+                href="#quote"
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.44, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="btn-primary mt-9 w-full py-4 text-base active:scale-95"
+              >
+                Get Quote
+              </motion.a>
+            </nav>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="px-7 pb-10"
+              style={{ paddingBottom: 'calc(2.5rem + env(safe-area-inset-bottom))' }}
+            >
+              <div className="flex gap-3">
+                {socials.map((s) => {
+                  const Icon = s.icon
+                  return (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="flex h-12 w-12 items-center justify-center rounded-full border
+                                 border-ink-600 text-cloud/75 transition-transform active:scale-90"
+                    >
+                      <Icon size={19} />
+                    </a>
+                  )
+                })}
+              </div>
+              <p className="mt-5 text-xs text-cloud/40">
+                {studio.location} · {studio.email}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

@@ -94,11 +94,11 @@ export const services = [
   },
   {
     id: 'puberty',
-    title: 'Coming-of-Age Shoots',
+    title: 'Puberty Ceremony',
     icon: Sparkles,
     image: u('photo-1464349095431-e9a21285b5f3'),
     blurb:
-      'Puberty and coming-of-age ceremonies photographed with warmth and cultural care — a milestone captured with dignity.',
+      'Puberty ceremonies photographed with warmth and cultural care — a coming-of-age milestone captured with dignity.',
     tags: ['Ceremony', 'Traditional', 'Family'],
   },
   {

@@ -6,7 +6,10 @@ export const studio = {
   // Digits only, with country code and no +, spaces or dashes, used for wa.me links.
   // 0760047671 → drop the leading 0, prefix 94 (Sri Lanka).
   whatsapp: '94760047671',
-  location: 'Sri Lanka',
+  // Short label for tight spaces, the cities covered, and the main studio address.
+  location: 'Wattala, Sri Lanka',
+  locations: ['Wattala', 'Dehiwela', 'Badulla', 'Bibila'],
+  address: 'Palliyawatta Rd, Wattala 11300, Sri Lanka',
   instagramHandle: 'blink_sky_production',
   instagram: 'https://www.instagram.com/blink_sky_production',
   facebook: 'https://www.facebook.com/share/19CaU4mRox/',
@@ -16,4 +19,9 @@ export const studio = {
 /** Build a WhatsApp deep link with a pre-filled message. */
 export function whatsappLink(message = "Hi BlinkSky! I'd like to enquire about a shoot.") {
   return `https://wa.me/${studio.whatsapp}?text=${encodeURIComponent(message)}`
+}
+
+/** Google Maps link for the main studio address. */
+export function mapsLink() {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(studio.address)}`
 }

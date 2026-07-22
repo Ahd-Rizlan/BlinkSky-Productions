@@ -1,31 +1,60 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Instagram, Facebook, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Mail, MapPin, Instagram, Facebook, Check, Pencil } from 'lucide-react'
 import TikTok from './icons/TikTok'
 import Reveal from './Reveal'
 import { services } from '../data/services'
-import { studio as STUDIO } from '../data/socials'
+import { studio as STUDIO, whatsappLink } from '../data/socials'
+
+/** WhatsApp glyph (lucide has no brand icons). */
+function WhatsAppIcon({ size = 18 }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 15.71c-.25.7-1.44 1.33-2 1.42-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.63-2.98-1.29-4.93-4.29-5.08-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.59-.37.79-.37h.57c.18.01.43-.07.67.51.25.6.84 2.05.92 2.2.07.15.12.32.02.52-.1.2-.15.33-.3.5-.15.17-.32.39-.45.52-.15.14-.3.3-.13.6.18.3.77 1.27 1.65 2.05 1.13 1.01 2.08 1.32 2.38 1.47.29.14.47.12.64-.08.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.08.12.08.71-.17 1.4z" />
+    </svg>
+  )
+}
 
 export default function Contact() {
-  const [sent, setSent] = useState(false)
   const [form, setForm] = useState({
     name: '',
     email: '',
     service: services[0].title,
     message: '',
   })
+  const [ready, setReady] = useState(false) // show channel picker after submit
+  const [igCopied, setIgCopied] = useState(false)
 
   const update = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
+  // One well-structured message, reused for every channel.
+  const buildMessage = () =>
+    `Hi BlinkSky Productions! I'd like to enquire about a shoot.\n\n` +
+    `Name: ${form.name}\n` +
+    `Service: ${form.service}\n` +
+    `Email: ${form.email}\n\n` +
+    `${form.message}`
+
   const handleSubmit = (e) => {
-    e.preventDefault()
-    // No backend required: compose a pre-filled email to the studio.
-    const subject = encodeURIComponent(`Shoot enquiry, ${form.service}`)
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nService: ${form.service}\n\n${form.message}`,
-    )
+    e.preventDefault() // required fields are already validated by the browser
+    setIgCopied(false)
+    setReady(true)
+  }
+
+  const sendEmail = () => {
+    const subject = encodeURIComponent(`Shoot enquiry: ${form.service}`)
+    const body = encodeURIComponent(buildMessage())
     window.location.href = `mailto:${STUDIO.email}?subject=${subject}&body=${body}`
-    setSent(true)
-    setTimeout(() => setSent(false), 4000)
+  }
+
+  // Instagram can't pre-fill a DM, so copy the message and open the chat.
+  const messageOnInstagram = async () => {
+    try {
+      await navigator.clipboard.writeText(buildMessage())
+      setIgCopied(true)
+    } catch {
+      /* clipboard blocked — the DM still opens, they can type it */
+    }
   }
 
   const inputBase =
@@ -47,24 +76,19 @@ export default function Contact() {
               tell. We&apos;ll get back within 24 hours with availability and a
               tailored quote.
             </p>
+
+            {/* Location, shown explicitly */}
+            <p className="mt-6 flex items-center gap-2.5 text-cloud/80">
+              <MapPin size={18} className="text-champagne" />
+              Based in {STUDIO.location}
+            </p>
           </Reveal>
 
-          {/* Icon-only contact row. The labels live in aria-label/title so the
-              destination is still announced to screen readers and shown on
-              hover, the icons alone carry the visual weight. */}
+          {/* Contact channels — icons; labels live in aria-label/title. */}
           <Reveal delay={0.1}>
-            <ul className="mt-10 flex flex-wrap gap-3">
+            <ul className="mt-6 flex flex-wrap gap-3">
               {[
-                {
-                  icon: Mail,
-                  href: `mailto:${STUDIO.email}`,
-                  label: STUDIO.email,
-                },
-                {
-                  icon: Phone,
-                  href: `tel:${STUDIO.phone.replace(/\s/g, '')}`,
-                  label: STUDIO.phone,
-                },
+                { icon: Mail, href: `mailto:${STUDIO.email}`, label: STUDIO.email },
                 {
                   icon: Instagram,
                   href: STUDIO.instagram,
@@ -100,107 +124,162 @@ export default function Contact() {
                   </a>
                 </li>
               ))}
-              <li>
-                <span
-                  title={STUDIO.location}
-                  aria-label={STUDIO.location}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border
-                             border-ink-600 text-cloud/60"
-                >
-                  <MapPin size={19} />
-                </span>
-              </li>
             </ul>
           </Reveal>
         </div>
 
-        {/* Right: form */}
+        {/* Right: form → channel picker */}
         <Reveal delay={0.1}>
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-3xl border border-ink-700 bg-ink-900/50 p-6 sm:p-8"
-          >
-            <div className="grid gap-5">
-              <div>
-                <label htmlFor="name" className="mb-2 block text-sm text-cloud/70">
-                  Your name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={update('name')}
-                  placeholder="Jane Perera"
-                  className={inputBase}
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="mb-2 block text-sm text-cloud/70">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={update('email')}
-                  placeholder="you@email.com"
-                  className={inputBase}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="service"
-                  className="mb-2 block text-sm text-cloud/70"
+          <div className="rounded-3xl border border-ink-700 bg-ink-900/50 p-6 sm:p-8">
+            {!ready ? (
+                <motion.form
+                  key="form"
+                  onSubmit={handleSubmit}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid gap-5"
                 >
-                  What are you after?
-                </label>
-                <select
-                  id="service"
-                  value={form.service}
-                  onChange={update('service')}
-                  className={inputBase}
+                  <div>
+                    <label htmlFor="name" className="mb-2 block text-sm text-cloud/70">
+                      Your name
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      required
+                      value={form.name}
+                      onChange={update('name')}
+                      placeholder="Jane Perera"
+                      className={inputBase}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="mb-2 block text-sm text-cloud/70">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={update('email')}
+                      placeholder="you@email.com"
+                      className={inputBase}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="service" className="mb-2 block text-sm text-cloud/70">
+                      What are you after?
+                    </label>
+                    <select
+                      id="service"
+                      value={form.service}
+                      onChange={update('service')}
+                      className={inputBase}
+                    >
+                      {services.map((s) => (
+                        <option key={s.id} value={s.title} className="bg-ink-900">
+                          {s.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="message" className="mb-2 block text-sm text-cloud/70">
+                      Tell us about it
+                    </label>
+                    <textarea
+                      id="message"
+                      rows={4}
+                      required
+                      value={form.message}
+                      onChange={update('message')}
+                      placeholder="Date, location, and the story you want to capture."
+                      className={`${inputBase} resize-none`}
+                    />
+                  </div>
+                  <button type="submit" className="btn-primary w-full">
+                    Contact Us
+                  </button>
+                  <p className="text-center text-xs text-cloud/40">
+                    Next, pick how to send it: WhatsApp, Instagram or email.
+                  </p>
+                </motion.form>
+              ) : (
+                <motion.div
+                  key="send"
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  {services.map((s) => (
-                    <option key={s.id} value={s.title} className="bg-ink-900">
-                      {s.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="mb-2 block text-sm text-cloud/70"
-                >
-                  Tell us about it
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  required
-                  value={form.message}
-                  onChange={update('message')}
-                  placeholder="Date, location, and the story you want to capture…"
-                  className={`${inputBase} resize-none`}
-                />
-              </div>
-              <button type="submit" className="btn-primary w-full">
-                {sent ? (
-                  <>
-                    <Check size={16} /> Opening your email…
-                  </>
-                ) : (
-                  'Contact Us'
-                )}
-              </button>
-              <p className="text-center text-xs text-cloud/40">
-                This opens your email app pre-filled. Prefer a live form? Wire it to
-                Formspree or a serverless function (see README).
-              </p>
-            </div>
-          </form>
+                  <div className="mb-1 flex items-center gap-2 text-champagne">
+                    <Check size={18} />
+                    <span className="font-serif text-xl text-cloud">
+                      Your enquiry is ready
+                    </span>
+                  </div>
+                  <p className="mb-5 text-sm text-cloud/55">
+                    Send it whichever way suits you, {form.name.split(' ')[0] || 'there'}.
+                    It&apos;s already written for you.
+                  </p>
+
+                  {/* Message preview */}
+                  <pre className="mb-5 max-h-40 overflow-auto whitespace-pre-wrap rounded-xl border border-ink-700 bg-ink-950/50 p-4 font-sans text-xs leading-relaxed text-cloud/70">
+                    {buildMessage()}
+                  </pre>
+
+                  <div className="grid gap-3">
+                    <a
+                      href={whatsappLink(buildMessage())}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full
+                                 bg-[#25D366] px-6 text-sm font-semibold text-ink-950
+                                 transition-all duration-300 hover:brightness-110 active:scale-95 cursor-pointer"
+                    >
+                      <WhatsAppIcon size={18} /> Send on WhatsApp
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={sendEmail}
+                      className="btn-ghost w-full"
+                    >
+                      <Mail size={16} /> Send by Email
+                    </button>
+
+                    <a
+                      href={`https://ig.me/m/${STUDIO.instagramHandle}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={messageOnInstagram}
+                      className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full
+                                 border border-champagne/50 px-6 text-sm font-medium text-champagne
+                                 transition-all duration-300 hover:bg-champagne hover:text-ink-950
+                                 active:scale-95 cursor-pointer"
+                    >
+                      <Instagram size={17} /> Message on Instagram
+                    </a>
+                  </div>
+
+                  {igCopied && (
+                    <p className="mt-3 flex items-center gap-1.5 text-xs text-[#25D366]">
+                      <Check size={13} /> Message copied — paste it into the Instagram
+                      chat.
+                    </p>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setReady(false)}
+                    className="mt-5 inline-flex items-center gap-1.5 text-xs text-cloud/50 underline-offset-4 hover:text-cloud hover:underline"
+                  >
+                    <Pencil size={12} /> Edit details
+                  </button>
+                </motion.div>
+              )}
+          </div>
         </Reveal>
       </div>
     </section>

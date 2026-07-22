@@ -4,7 +4,7 @@ import { Mail, MapPin, Instagram, Facebook, Check, Pencil } from 'lucide-react'
 import TikTok from './icons/TikTok'
 import Reveal from './Reveal'
 import { services } from '../data/services'
-import { studio as STUDIO, whatsappLink } from '../data/socials'
+import { studio as STUDIO, whatsappLink, mapsLink } from '../data/socials'
 
 /** WhatsApp glyph (lucide has no brand icons). */
 function WhatsAppIcon({ size = 18 }) {
@@ -77,11 +77,25 @@ export default function Contact() {
               tailored quote.
             </p>
 
-            {/* Location, shown explicitly */}
-            <p className="mt-6 flex items-center gap-2.5 text-cloud/80">
-              <MapPin size={18} className="text-champagne" />
-              Based in {STUDIO.location}
-            </p>
+            {/* Locations, shown explicitly */}
+            <div className="mt-6">
+              <p className="flex items-start gap-2.5 text-cloud/80">
+                <MapPin size={18} className="mt-0.5 shrink-0 text-champagne" />
+                <span>
+                  Studios in{' '}
+                  <span className="text-cloud">{STUDIO.locations.join(' · ')}</span>
+                </span>
+              </p>
+              <a
+                href={mapsLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-[30px] mt-1 inline-block text-sm text-cloud/55 underline-offset-4
+                           transition-colors hover:text-champagne hover:underline"
+              >
+                {STUDIO.address}
+              </a>
+            </div>
           </Reveal>
 
           {/* Contact channels — icons; labels live in aria-label/title. */}

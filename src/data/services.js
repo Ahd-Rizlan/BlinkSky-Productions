@@ -7,6 +7,9 @@ import {
   Sparkles,
   Video,
   Users,
+  GraduationCap,
+  Crown,
+  Flame,
 } from 'lucide-react'
 
 // Swap `image` for your own work (e.g. /gallery/wedding-hero.jpg) — these are
@@ -14,17 +17,9 @@ import {
 const u = (id, w = 900) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`
 
-// Each service: the studio's offerings. Swap descriptions freely.
+// Each service: the studio's offerings. Add, remove or rename freely — the
+// "What We Shoot" grid renders whatever is listed here.
 export const services = [
-  {
-    id: 'model',
-    title: 'Model Shoots',
-    icon: Camera,
-    image: u('photo-1524504388940-b1c1722653e1'),
-    blurb:
-      'Editorial and portfolio work that turns a face into a story — studio light, location, and direction that makes the camera fall in love.',
-    tags: ['Editorial', 'Portfolio', 'Fashion'],
-  },
   {
     id: 'wedding',
     title: 'Wedding Shoots',
@@ -44,6 +39,15 @@ export const services = [
     tags: ['Portrait', 'Getting Ready', 'Details'],
   },
   {
+    id: 'model',
+    title: 'Model Shoots',
+    icon: Camera,
+    image: u('photo-1524504388940-b1c1722653e1'),
+    blurb:
+      'Editorial and portfolio work that turns a face into a story — studio light, location, and direction that makes the camera fall in love.',
+    tags: ['Editorial', 'Portfolio', 'Fashion'],
+  },
+  {
     id: 'commercial',
     title: 'Commercial Shoots',
     icon: Building2,
@@ -60,6 +64,33 @@ export const services = [
     blurb:
       'From first birthdays to milestone parties — candid, colourful coverage that keeps the laughter alive for years.',
     tags: ['Candid', 'Family', 'Events'],
+  },
+  {
+    id: 'graduation',
+    title: 'Graduation Portraits',
+    icon: GraduationCap,
+    image: u('photo-1627556704302-624286467c65'),
+    blurb:
+      'Cap, gown and the pride of the day — solo portraits and group shots that mark the milestone in style.',
+    tags: ['Solo', 'Group', 'Convocation'],
+  },
+  {
+    id: 'prom',
+    title: 'Prom & Formal Portraits',
+    icon: Crown,
+    image: u('photo-1566174053879-31528523f8ae'),
+    blurb:
+      'Prom nights, formals and black-tie moments — polished portraits with all the glamour the occasion deserves.',
+    tags: ['Prom', 'Formal', 'Couples'],
+  },
+  {
+    id: 'religious',
+    title: 'Religious Ceremonies',
+    icon: Flame,
+    image: u('photo-1545239705-1564e58b9e4a'),
+    blurb:
+      'Blessings, poojas, baptisms and cultural rites — documented with respect and a quiet, unobtrusive presence.',
+    tags: ['Ceremony', 'Cultural', 'Traditional'],
   },
   {
     id: 'puberty',
@@ -81,11 +112,11 @@ export const services = [
   },
   {
     id: 'events',
-    title: 'Events & More',
+    title: 'Events & Everything Else',
     icon: Users,
     image: u('photo-1465495976277-4387d4b0b4c6'),
     blurb:
-      'Corporate events, engagements, maternity and beyond. If it matters to you, we frame it — just ask.',
+      'Corporate events, engagements, maternity, homecomings and beyond. Whatever the occasion — if it matters to you, we frame it.',
     tags: ['Corporate', 'Engagement', 'Maternity'],
   },
 ]

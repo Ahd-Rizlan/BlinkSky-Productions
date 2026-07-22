@@ -1,7 +1,7 @@
 import { Instagram, Facebook } from 'lucide-react'
 import TikTok from './icons/TikTok'
 import Logo from './Logo'
-import { studio } from '../data/socials'
+import { studio, developer, developerWhatsappLink } from '../data/socials'
 
 const nav = [
   { href: '#services', label: 'Services' },
@@ -64,7 +64,17 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-ink-800 pt-6 text-xs text-cloud/40 sm:flex-row">
           <p>© {new Date().getFullYear()} BlinkSky Productions. All rights reserved.</p>
-          <p>Crafted with care.</p>
+          <p>
+            Developed by{' '}
+            <a
+              href={developerWhatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-cloud/60 underline-offset-4 transition-colors hover:text-champagne hover:underline"
+            >
+              {developer.name}
+            </a>
+          </p>
         </div>
       </div>
     </footer>

@@ -25,3 +25,16 @@ export function whatsappLink(message = "Hi BlinkSky! I'd like to enquire about a
 export function mapsLink() {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(studio.address)}`
 }
+
+// Who built the website (footer credit). WhatsApp digits: 0760484612 → 94760484612.
+export const developer = {
+  name: 'BlinkSky Productions',
+  whatsapp: '94760484612',
+}
+
+/** WhatsApp link to the website's developer. */
+export function developerWhatsappLink(
+  message = "Hi! I saw the BlinkSky website and I'd like to enquire about a website.",
+) {
+  return `https://wa.me/${developer.whatsapp}?text=${encodeURIComponent(message)}`
+}

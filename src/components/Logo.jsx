@@ -23,7 +23,7 @@ export default function Logo({ className = '', size = 'md', asLink = true }) {
     <a
       href="#top"
       className={`inline-flex items-center transition-opacity duration-300 hover:opacity-80 ${className}`}
-      aria-label="BlinkSky Productions — home"
+      aria-label="BlinkSky Productions, home"
     >
       {img}
     </a>

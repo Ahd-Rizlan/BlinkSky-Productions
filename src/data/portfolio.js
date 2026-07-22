@@ -1,7 +1,7 @@
 // Portfolio gallery items.
 // These use high-quality Unsplash placeholders so the site looks alive today.
 // Replace `src` with your own image paths (e.g. /gallery/wedding-01.jpg) once
-// you drop files into the /public folder — the layout adapts automatically.
+// you drop files into the /public folder, the layout adapts automatically.
 
 export const categories = [
   { id: 'all', label: 'All Work' },

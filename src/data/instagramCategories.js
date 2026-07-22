@@ -1,7 +1,7 @@
 /**
  * Turning Instagram posts into categories.
  *
- * IMPORTANT: the Instagram Graph API returns no category, tag or album field —
+ * IMPORTANT: the Instagram Graph API returns no category, tag or album field
  * only the caption text. So the only thing we can classify on is what you write
  * in the caption (hashtags or plain words).
  *
@@ -10,7 +10,7 @@
  * A post matching nothing falls back to `fallback` below.
  *
  * Rules are matched case-insensitively against the whole caption, with or
- * without a leading '#'. First category with a hit wins, so order matters —
+ * without a leading '#'. First category with a hit wins, so order matters
  * put the more specific ones first (bridal before wedding).
  */
 
@@ -58,7 +58,7 @@ export const fallback = { id: 'other', label: 'More Work' }
 /**
  * FEATURE FLAG.
  *
- * false (current): sort posts only by media type — Reels vs Posts. Use this
+ * false (current): sort posts only by media type, Reels vs Posts. Use this
  *   until captions carry hashtags, since there's nothing else to sort on.
  * true (future): once posts are captioned with tags like #wedding / #bridal,
  *   flip this to sort into the shoot-type categories defined in categoryRules
@@ -67,7 +67,7 @@ export const fallback = { id: 'other', label: 'More Work' }
 export const USE_CAPTION_CATEGORIES = false
 
 /**
- * Work out a category. Returns { id, label } — never null, so the UI always
+ * Work out a category. Returns { id, label }, never null, so the UI always
  * has something to show.
  */
 export function categorise(caption = '', mediaType = '') {

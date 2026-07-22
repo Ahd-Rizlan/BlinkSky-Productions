@@ -53,7 +53,7 @@ export default function Nav() {
       >
         {/* The blurred bar lives on its own layer so its soft lower edge can be
             masked without fading the logo and menu button with it. A hard
-            border-b here would read as a crisp grey seam over the dark hero —
+            border-b here would read as a crisp grey seam over the dark hero
             this fades out instead, so there's no line in either state. */}
         <div
           aria-hidden="true"

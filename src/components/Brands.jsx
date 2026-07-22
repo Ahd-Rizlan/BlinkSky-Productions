@@ -3,7 +3,7 @@ import { useReducedMotion } from 'framer-motion'
 import SectionHeading from './SectionHeading'
 
 // AUTO-UPDATING BRAND WALL.
-// Every image dropped into src/assets/brands/ is picked up automatically here —
+// Every image dropped into src/assets/brands/ is picked up automatically here
 // no code changes needed. Just add the file and it appears (name = filename).
 const modules = import.meta.glob(
   '../assets/brands/*.{png,jpg,jpeg,PNG,JPG,JPEG,webp,svg}',
@@ -42,7 +42,7 @@ const LOGO_SCALE = {
 
 /**
  * Optional chip-colour overrides. Normally the chip colour is sampled from the
- * logo's own background (see measureChip). Use this to pin a specific colour —
+ * logo's own background (see measureChip). Use this to pin a specific colour
  * e.g. a logo whose background was cleaned up and should sit on plain white.
  */
 const LOGO_CHIP = {

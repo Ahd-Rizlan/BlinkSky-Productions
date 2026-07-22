@@ -29,7 +29,7 @@ export default function Portfolio() {
     [filter],
   )
 
-  // The gallery is a teaser, not an archive — cap it and send people to
+  // The gallery is a teaser, not an archive, cap it and send people to
   // Instagram for the full body of work.
   const shown = useMemo(() => items.slice(0, MAX_SHOWN), [items])
 
@@ -55,7 +55,7 @@ export default function Portfolio() {
           intro="A living portfolio across every kind of shoot. Filter by category, and tap any frame to view it full-size."
         />
 
-        {/* Filter pills — a swipeable snap row on phones so they never wrap into
+        {/* Filter pills, a swipeable snap row on phones so they never wrap into
             a cramped block; normal wrapping from sm up. 44px touch targets. */}
         <div
           className="-mx-6 mt-10 flex snap-x gap-2.5 overflow-x-auto px-6 pb-1
@@ -115,7 +115,7 @@ export default function Portfolio() {
                 {/* On touch there is no hover, so the title/gradient stay
                     visible by default and only hide-until-hover from md up. */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100" />
-                {/* Category badge — always on, so every frame says what kind of
+                {/* Category badge, always on, so every frame says what kind of
                     shoot it is even when the filter is set to All Work. */}
                 <span
                   className="absolute left-2.5 top-2.5 rounded-full bg-ink-950/70 px-2.5 py-1

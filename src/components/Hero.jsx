@@ -54,7 +54,7 @@ export default function Hero() {
           transition={{ delay: 0.7, duration: 0.9 }}
         >
           From weddings and bridal portraits to model, commercial and celebration
-          shoots — BlinkSky Productions turns fleeting moments into cinematic
+          shoots, BlinkSky Productions turns fleeting moments into cinematic
           stories you&apos;ll return to for a lifetime.
         </motion.p>
 

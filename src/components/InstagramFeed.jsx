@@ -31,7 +31,7 @@ export default function InstagramFeed() {
     [posts, filter],
   )
 
-  // A taste of the feed, not the whole feed — Instagram is the archive.
+  // A taste of the feed, not the whole feed, Instagram is the archive.
   const shown = useMemo(() => filtered.slice(0, MAX_SHOWN), [filtered])
 
   return (
@@ -55,7 +55,7 @@ export default function InstagramFeed() {
           </Reveal>
         </div>
 
-        {/* Categories derived from each post's caption — Instagram itself
+        {/* Categories derived from each post's caption, Instagram itself
             returns no category, so hashtags/keywords are the only signal. */}
         {present.length > 1 && (
           <div
@@ -121,7 +121,7 @@ export default function InstagramFeed() {
                   rel="noopener noreferrer"
                   className="group relative mb-3 block break-inside-avoid overflow-hidden rounded-lg bg-ink-800 transition-transform active:scale-[0.97] md:mb-4"
                   aria-label={
-                    (isVideo ? 'Play video — ' : '') +
+                    (isVideo ? 'Play video, ' : '') +
                     (post.caption?.slice(0, 60) || 'View on Instagram')
                   }
                 >

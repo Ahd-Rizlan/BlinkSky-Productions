@@ -15,7 +15,7 @@ import { useHashRoute } from './hooks/useHashRoute'
 export default function App() {
   const route = useHashRoute()
 
-  // /#quote is a standalone page — no site chrome, so the wizard has the
+  // /#quote is a standalone page, no site chrome, so the wizard has the
   // visitor's full attention.
   if (route === 'quote') return <QuotePage />
 

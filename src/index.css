@@ -15,7 +15,7 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /* No grey flash box when tapping on mobile — we supply our own press
+  /* No grey flash box when tapping on mobile, we supply our own press
      feedback through active: states instead. */
   a,
   button,

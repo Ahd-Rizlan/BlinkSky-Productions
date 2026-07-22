@@ -4,7 +4,7 @@ import { services } from '../data/services'
 import SectionHeading from './SectionHeading'
 
 /**
- * Services showcase — a bento grid where every tile IS a photograph.
+ * Services showcase, a bento grid where every tile IS a photograph.
  *
  * Image-first by design: for a photo studio the work has to do the selling, so
  * each service is a full-bleed frame with the title over it. Hovering (or
@@ -31,7 +31,7 @@ export default function Services() {
         <SectionHeading
           eyebrow="What We Shoot"
           title="Every milestone deserves a frame."
-          intro="One studio, many stories. Explore the work — whatever the occasion, we bring the same cinematic craft to every frame."
+          intro="One studio, many stories. Explore the work, whatever the occasion, we bring the same cinematic craft to every frame."
           align="center"
         />
 
@@ -57,7 +57,7 @@ export default function Services() {
               >
               <motion.a
                 href="#contact"
-                aria-label={`${s.title} — enquire`}
+                aria-label={`${s.title}, enquire`}
                 initial="rest"
                 animate="rest"
                 whileHover="hov"
@@ -67,7 +67,7 @@ export default function Services() {
                            hover:ring-champagne/60 focus-visible:outline-none
                            focus-visible:ring-2 focus-visible:ring-champagne"
               >
-                {/* Photograph — zoom driven by Framer so it can't be lost to a
+                {/* Photograph, zoom driven by Framer so it can't be lost to a
                     CSS transform-composition quirk. */}
                 <motion.img
                   src={s.image}
@@ -79,7 +79,7 @@ export default function Services() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
 
-                {/* Legibility wash — deepens on hover */}
+                {/* Legibility wash, deepens on hover */}
                 <div
                   className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/45 to-ink-950/5
                              transition-opacity duration-500 group-hover:from-ink-950

@@ -37,15 +37,15 @@ export default function About() {
           <Reveal>
             <p className="eyebrow mb-4">The Studio</p>
             <h2 className="font-serif text-4xl leading-tight text-cloud sm:text-5xl">
-              We don&apos;t just take photos — we keep time.
+              We don&apos;t just take photos, we keep time.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-6 leading-relaxed text-cloud/65">
               BlinkSky Productions is a photography and videography studio built on
               a simple belief: the best images feel like memories, not poses. We
-              blend documentary instinct with cinematic craft — reading the light,
-              the room and the people in it — so every frame carries the feeling of
+              blend documentary instinct with cinematic craft, reading the light,
+              the room and the people in it, so every frame carries the feeling of
               the moment it came from.
             </p>
           </Reveal>
@@ -53,7 +53,7 @@ export default function About() {
             <p className="mt-4 leading-relaxed text-cloud/65">
               From intimate bridal portraits to full-scale commercial productions,
               our team brings the same obsessive care to the details that others
-              overlook. Big day or quiet milestone — we&apos;re there to make it
+              overlook. Big day or quiet milestone, we&apos;re there to make it
               last.
             </p>
           </Reveal>

@@ -3,7 +3,7 @@
  * every screenshot and share.
  *
  * NOTE: this is a display overlay. It appears in screenshots and screen
- * recordings, but it is NOT baked into the source file — someone who
+ * recordings, but it is NOT baked into the source file, someone who
  * right-clicks "Save image" gets the clean original. To protect the files
  * themselves the watermark has to be burned into the images before upload.
  */

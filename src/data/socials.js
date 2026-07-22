@@ -3,7 +3,7 @@
 export const studio = {
   email: 'blinkskyproduction@gmail.com',
   phone: '+94 76 004 7671',
-  // Digits only, with country code and no +, spaces or dashes — used for wa.me links.
+  // Digits only, with country code and no +, spaces or dashes, used for wa.me links.
   // 0760047671 → drop the leading 0, prefix 94 (Sri Lanka).
   whatsapp: '94760047671',
   location: 'Sri Lanka',

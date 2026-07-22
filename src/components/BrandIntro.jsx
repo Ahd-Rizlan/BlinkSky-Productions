@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 
 /**
- * Brief animated logo reveal on first load — a deliberate brand moment so the
+ * Brief animated logo reveal on first load, a deliberate brand moment so the
  * mark is the first thing a visitor sees.
  *
  * Shown ONCE per browser session (sessionStorage) so returning to the page
@@ -21,7 +21,7 @@ export default function BrandIntro() {
     try {
       seen = sessionStorage.getItem(SEEN_KEY) === '1'
     } catch {
-      seen = false // private mode / storage blocked — just skip the intro
+      seen = false // private mode / storage blocked, just skip the intro
     }
     if (seen) return
 

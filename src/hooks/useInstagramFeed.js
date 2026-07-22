@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { categorise } from '../data/instagramCategories'
 
 /**
- * useInstagramFeed — fetches recent media from the Instagram Graph API.
+ * useInstagramFeed, fetches recent media from the Instagram Graph API.
  *
  * SETUP (see README.md "Instagram Graph API" section for full walkthrough):
  *   1. Convert the IG account to a Business/Creator account and link it to a

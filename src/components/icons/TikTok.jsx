@@ -1,4 +1,4 @@
-// TikTok glyph — lucide-react doesn't ship brand icons, so we inline it.
+// TikTok glyph, lucide-react doesn't ship brand icons, so we inline it.
 export default function TikTok({ size = 18, className = '' }) {
   return (
     <svg

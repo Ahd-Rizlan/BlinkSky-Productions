@@ -98,7 +98,7 @@ export default function QuotePage() {
       `Coverage: ${data.coverage}`,
       `Team: ${data.team}`,
       `Location: ${data.location}`,
-      `Deliverables: ${data.deliverables.join(', ') || '—'}`,
+      `Deliverables: ${data.deliverables.join(', ') || '-'}`,
       `Add-ons: ${data.addOns.join(', ') || 'None'}`,
       data.budget && `Budget: ${data.budget}`,
       data.date && `Preferred date: ${data.date}`,
@@ -112,7 +112,7 @@ export default function QuotePage() {
   }
 
   const sendEmail = () => {
-    const subject = encodeURIComponent(`Quote request — ${data.shootType}`)
+    const subject = encodeURIComponent(`Quote request, ${data.shootType}`)
     const body = encodeURIComponent(
       `Hi BlinkSky,\n\nI'd like a quote for the following:\n\n${summary()}\n`,
     )
@@ -176,7 +176,7 @@ export default function QuotePage() {
           {STEP_TITLES[step]}
         </h1>
         <p className="mt-3 max-w-xl text-cloud/60">
-          No obligation — this just helps us price it accurately. Takes about a
+          No obligation, this just helps us price it accurately. Takes about a
           minute.
         </p>
 
@@ -189,7 +189,7 @@ export default function QuotePage() {
               exit={{ opacity: 0, x: -24 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Step 1 — shoot type */}
+              {/* Step 1, shoot type */}
               {step === 1 && (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                   {services.map((s) => {
@@ -229,7 +229,7 @@ export default function QuotePage() {
                 </div>
               )}
 
-              {/* Steps 2 & 3 — option groups */}
+              {/* Steps 2 & 3, option groups */}
               {(step === 2 || step === 3) &&
                 stepGroups[step].map((key) => (
                   <Pills
@@ -244,7 +244,7 @@ export default function QuotePage() {
               {step === 3 && (
                 <>
                   <Pills
-                    group={{ label: 'Rough budget?', hint: 'Optional — helps us tailor the options.', type: 'single', options: budgets }}
+                    group={{ label: 'Rough budget?', hint: 'Optional, helps us tailor the options.', type: 'single', options: budgets }}
                     value={data.budget}
                     onChange={(v) => set('budget', v)}
                   />
@@ -264,7 +264,7 @@ export default function QuotePage() {
                 </>
               )}
 
-              {/* Step 4 — details + review */}
+              {/* Step 4, details + review */}
               {step === 4 && (
                 <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
                   <div className="grid gap-5">

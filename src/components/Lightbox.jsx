@@ -63,7 +63,7 @@ export default function Lightbox({ items, index, onClose, onNav }) {
           </button>
 
           {/* Draggable on touch: swipe left/right to move between photos,
-              swipe down to dismiss — the gestures people expect from a phone
+              swipe down to dismiss, the gestures people expect from a phone
               gallery. Arrows remain for pointer and keyboard users. */}
           <motion.figure
             key={item.id}
@@ -74,7 +74,7 @@ export default function Lightbox({ items, index, onClose, onNav }) {
             /* Swipe is handled with plain pointer events rather than framer's
                `drag`. With `drag` enabled the element never finishes its exit
                animation, so AnimatePresence keeps the dialog mounted at
-               opacity 0 — an invisible full-screen layer that eats every tap. */
+               opacity 0, an invisible full-screen layer that eats every tap. */
             onPointerDown={(e) => {
               swipe.current = { x: e.clientX, y: e.clientY, t: Date.now() }
             }}

@@ -1,7 +1,7 @@
 /**
  * Options for the quote builder (/#quote).
  *
- * Edit freely — the wizard renders whatever is here, so adding a coverage tier
+ * Edit freely, the wizard renders whatever is here, so adding a coverage tier
  * or an add-on needs no code change. `type: 'single'` renders radio-style
  * pills; `type: 'multi'` renders checkbox-style pills.
  */
@@ -56,7 +56,7 @@ export const quoteGroups = {
   },
   addOns: {
     label: 'Any add-ons?',
-    hint: 'Optional — skip if none apply.',
+    hint: 'Optional, skip if none apply.',
     type: 'multi',
     options: [
       'Drone / aerial shots',

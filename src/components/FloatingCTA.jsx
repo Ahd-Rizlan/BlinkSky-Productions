@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CalendarCheck, Mail } from 'lucide-react'
 import { whatsappLink } from '../data/socials'
 
-/** WhatsApp glyph — lucide has no brand icons. */
+/** WhatsApp glyph, lucide has no brand icons. */
 function WhatsAppIcon({ size = 22, className = '' }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor" aria-hidden="true">

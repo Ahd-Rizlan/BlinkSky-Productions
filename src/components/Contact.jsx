@@ -19,7 +19,7 @@ export default function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault()
     // No backend required: compose a pre-filled email to the studio.
-    const subject = encodeURIComponent(`Shoot enquiry — ${form.service}`)
+    const subject = encodeURIComponent(`Shoot enquiry, ${form.service}`)
     const body = encodeURIComponent(
       `Name: ${form.name}\nEmail: ${form.email}\nService: ${form.service}\n\n${form.message}`,
     )
@@ -43,7 +43,7 @@ export default function Contact() {
               Have a moment worth keeping? Let&apos;s talk.
             </h2>
             <p className="mt-6 max-w-md leading-relaxed text-cloud/65">
-              Tell us about your shoot — the date, the vibe, the story you want to
+              Tell us about your shoot, the date, the vibe, the story you want to
               tell. We&apos;ll get back within 24 hours with availability and a
               tailored quote.
             </p>
@@ -51,7 +51,7 @@ export default function Contact() {
 
           {/* Icon-only contact row. The labels live in aria-label/title so the
               destination is still announced to screen readers and shown on
-              hover — the icons alone carry the visual weight. */}
+              hover, the icons alone carry the visual weight. */}
           <Reveal delay={0.1}>
             <ul className="mt-10 flex flex-wrap gap-3">
               {[

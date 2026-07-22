@@ -1,31 +1,45 @@
-// Optional serverless proxy (Vercel / Netlify Functions style).
-// Keeps your Instagram access token OFF the client. Deploy this, then set
-// VITE_IG_PROXY_URL=/api/instagram in your .env.
+// Serverless proxy (Vercel / Netlify Functions).
 //
-// Server-side env vars needed (set them in your host's dashboard, NOT with the
-// VITE_ prefix so they never reach the browser):
-//   IG_ACCESS_TOKEN=<long-lived token>
-//   IG_USER_ID=<instagram business user id>
+// WHY THIS EXISTS: it keeps the Instagram access token on the SERVER. The
+// browser calls /api/instagram (this function), and this function calls
+// Instagram with the secret token. The token is never sent to, or visible in,
+// the website itself — so no visitor can see or steal it.
+//
+// Server-side env vars (set them in your host's dashboard, WITHOUT the VITE_
+// prefix so they never reach the browser):
+//   IG_ACCESS_TOKEN = <long-lived token>   (required)
+//   IG_USER_ID      = me                    (optional, defaults to "me")
+//
+// Then point the frontend at this proxy with a build env var:
+//   VITE_IG_PROXY_URL = /api/instagram
+// and DO NOT set VITE_IG_ACCESS_TOKEN in production (that would expose it).
 
 export default async function handler(req, res) {
   const token = process.env.IG_ACCESS_TOKEN
-  const userId = process.env.IG_USER_ID
-  const limit = Number(req.query?.limit) || 12
+  const userId = process.env.IG_USER_ID || 'me'
+  const limit = Math.min(Number(req.query?.limit) || 12, 50)
 
-  if (!token || !userId) {
-    res.status(500).json({ error: 'Instagram credentials not configured' })
+  if (!token) {
+    res.status(500).json({ error: 'IG_ACCESS_TOKEN not configured' })
     return
   }
 
-  const fields = 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp'
+  const fields =
+    'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp'
   const url = `https://graph.instagram.com/${userId}/media?fields=${fields}&limit=${limit}&access_token=${token}`
 
   try {
     const r = await fetch(url)
-    if (!r.ok) throw new Error(`Graph API ${r.status}`)
     const json = await r.json()
-    // Cache at the edge for 10 min so we don't hammer the API.
-    res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1200')
+    // Surface a real Instagram error (e.g. an expired token) rather than
+    // returning an empty feed silently.
+    if (json.error) {
+      res.status(502).json({ error: json.error.message || 'Instagram error' })
+      return
+    }
+    // Live feed: cache only briefly at the edge so new posts appear within a
+    // minute, while still shielding the API from every single page view.
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300')
     res.status(200).json({ data: json.data || [] })
   } catch (err) {
     res.status(502).json({ error: err.message })

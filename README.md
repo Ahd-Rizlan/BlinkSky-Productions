@@ -144,6 +144,30 @@ managed embed service (Behold.so, EmbedSocial) if you'd rather not maintain it.
 
 ---
 
+## Deploying to Vercel (live, secure Instagram feed)
+
+1. Push the repo to GitHub (already done).
+2. At [vercel.com](https://vercel.com), **Sign up → Continue with GitHub** (free).
+3. **Add New → Project → Import** `BlinkSky-Productions`. Vercel auto-detects
+   Vite — don't change the build settings.
+4. Before deploying, open **Environment Variables** and add these three:
+
+   | Name | Value | Notes |
+   |------|-------|-------|
+   | `IG_ACCESS_TOKEN` | your long-lived token | server-only — stays private |
+   | `IG_USER_ID` | `me` | server-only |
+   | `VITE_IG_PROXY_URL` | `/api/instagram` | tells the site to use the proxy |
+
+   **Do NOT add `VITE_IG_ACCESS_TOKEN`** — a `VITE_` variable is baked into the
+   public site. The un-prefixed `IG_ACCESS_TOKEN` lives only on the server.
+5. Click **Deploy**. The `api/instagram.js` function serves the feed server-side,
+   so the token is never exposed to visitors. New posts appear within ~1 minute.
+
+**Token renewal (~every 50–60 days):** generate/refresh a token and update
+`IG_ACCESS_TOKEN` in Vercel's settings — no code change, no redeploy of code.
+The refresh needs only the current token (no App Secret). This can be automated
+with a scheduled function later.
+
 ## 4. Make the contact form send for real (optional)
 
 The form currently opens the visitor's email app pre-filled (no backend needed).
